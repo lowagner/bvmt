@@ -1,0 +1,106 @@
+MeetSwordAxeConvo: convo{
+    Once: True
+    say{
+        Speaker: BunkerGuard1
+        Text: "We'll give you a sword as recompense."
+    }
+    say{
+        Speaker: BunkerGuard1
+        Emotion: Rummaging
+        Text: "We found it recently..."
+        Trigger: Rummaging
+    }
+    say{
+        Speaker: BunkerGuard2
+        Text: "Oh that weapon.  Isn't it more like a sword axe?"
+    }
+    say{
+        Speaker: Unknown
+        Text: "Help! Help me!  Anyone!"
+    }
+    say{
+        Speaker: BunkerGuard1
+        Text: "Here it is!"
+        Trigger: PullsOutSwordAxe
+    }
+    say{
+        Speaker: BunkerGuard1
+        Text: "You'll need it on your journey."
+    }
+    say{
+        Speaker: SwordAxe
+        Text: ("
+            You there!  I sense greatness in you!
+            But it's buried so... so very, very deep.
+        ")
+    }
+    say{
+        Speaker: Triangle
+        Emotion: WhoMe
+        Text: "???"
+    }
+    say{
+        Speaker: SwordAxe
+        Emotion: Dramatic
+        Text: ("
+            No one else can hear me.
+            It's been so boring with no one to talk to!
+        ")
+    }
+    say{
+        Speaker: SwordAxe
+        Emotion: Eager
+        Text: "Take me with you, and I can help you!"
+    }
+    say{
+        Speaker: SwordAxe
+        Text: "I can give you..."
+    }
+    say{
+        Speaker: SwordAxe
+        Emotion: Deranged
+        Text: "UNLIMITED POWER!@#$"
+    }
+    say{
+        Speaker: Triangle
+        Text: "I think it's a cursed sword."
+    }
+    say{
+        Speaker: BunkerGuard2
+        Emotion: Mumbling
+        Text: "A cursed sword axe."
+    }
+    say{
+        Speaker: BunkerGuard1
+        Text: "If it was cursed, I wouldn't be able to let go of it."
+    }
+    say{
+        Speaker: BunkerGuard2
+        Text: "We've been using it to play hoops."
+    }
+    say{
+        Speaker: SwordAxe
+        Emotion: Lamenting
+        Text: "I was made to kill things..."
+    }
+    say{
+        Speaker: BunkerGuard1
+        Text: ("
+            I'll be honest.  We don't feel comfortable around
+            this sword.  Gives off a weird aura.  But I think
+            it's compatible with your general...
+        ")
+    }
+    say{
+        Speaker: BunkerGuard2
+        Text: "Aspect?"
+    }
+    say{
+        Speaker: BunkerGuard1
+        Text: "Yeah, it's geometric, and so are you."
+    }
+    say{
+        Speaker: SwordAxe
+        Text: "We are gonna have so much fun destroying things together!"
+    }
+}
