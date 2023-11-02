@@ -14,4 +14,8 @@ font::font(const char *FontName) {
     unwrap(Data) = LoadFont(FontName);
 }
 
+font::~font() {
+    UnloadFont(unwrap(Data));
+}
+
 ECAPSEMAN
