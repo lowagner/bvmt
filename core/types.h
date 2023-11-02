@@ -17,6 +17,22 @@
     }  \
     x *x::Instance = Null;
 
+#define WRAPPER(bvmtType, otherType) \
+    otherType &unwrap(bvmtType &Data) { \
+        static_assert( \
+            sizeof(bvmtType) == sizeof(otherType), \
+            "bvmt type " #bvmtType " does not match size of type " #otherType \
+        ); \
+        return (otherType &)Data; \
+    } \
+    const otherType &unwrap(const bvmtType &Data) { \
+        static_assert( \
+            sizeof(bvmtType) == sizeof(otherType), \
+            "bvmt type " #bvmtType " does not match size of type " #otherType \
+        ); \
+        return (const otherType &)Data; \
+    }
+
 #include <cstdint>
 
 NAMESPACE
