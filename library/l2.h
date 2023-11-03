@@ -23,9 +23,9 @@ struct l2 {
     textureBatcher batch();
     void writeToRow(const char *Chars);
 private:
-    // This is a pointer because the window can change the texture
+    // This is a pointer-pointer because the window can change the texture
     // when changing resolution, and we want to grab the updated version.
-    windowTexture *Texture;
+    windowTexture **Texture;
 };
 
 // TODO: when drawing an l2 in an l3, we need the l3 to own the texture

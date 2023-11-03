@@ -5,7 +5,7 @@
 BVMT
 
 l2::l2() {
-    Texture = window::get()->TextureL2;
+    Texture = &window::get()->TextureL2;
 }
 
 textureBatcher l2::batch() {
