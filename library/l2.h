@@ -17,6 +17,10 @@ struct l2 {
 
     l2();
 
+    // Creates a batch operation for writing to the underlying texture
+    // multiple times.  If you are doing many operations, prefer calling
+    // this first.  This is safe to call multiple times, even nested.
+    textureBatcher batch();
     void writeToRow(const char *Chars);
 private:
     // This is a pointer because the window can change the texture
