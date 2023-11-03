@@ -1,7 +1,11 @@
 #pragma once
 
+// TODO: rename to BVMT
 #define NAMESPACE namespace bvmt {
+// TODO: rename to TMVB
 #define ECAPSEMAN }
+
+#define DELETE(x) {delete (x); (x) = Null;}
 
 #define SINGLETON_H(x) \
     private: x(); \
@@ -17,6 +21,16 @@
     }  \
     x *x::Instance = Null;
 
+#define UNMOVABLE_CLASS(x) \
+    x(x &&IgnoreInstance) = delete; \
+    x &operator =(x &&IgnoreInstance) = delete;
+
+#define UNCOPYABLE_CLASS(type) \
+    type (const type &ExistingInstance) = delete; \
+    type &operator = (const type &ExistingInstance) = delete;
+
+// We should never use WRAPPER with classes that can have children.
+// TODO: maybe fix the sizeof expressions to accomodate the vtable.
 #define WRAPPER(bvmtType, otherType) \
     otherType &unwrap(bvmtType &Data) { \
         static_assert( \
@@ -41,6 +55,7 @@ constexpr bool True = true;
 constexpr bool False = false;
 typedef decltype(nullptr) null;
 constexpr null Null = nullptr;
+#define This (*this)
 
 typedef int64_t i64;
 typedef int32_t i32;
