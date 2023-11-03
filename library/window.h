@@ -12,6 +12,8 @@ class l3;
 typedef size2<i32> windowResolution;
 
 struct windowTexture {
+    // This is a null texture that is ineligible to be drawn to.
+    windowTexture();
     windowTexture(windowResolution Resolution);
     ~windowTexture();
 private:
@@ -35,9 +37,9 @@ struct window {
 private:
     windowResolution Resolution = DefaultWindowResolution;
     // The L3 texture is drawn first.
-    windowTexture *TextureL3;
+    windowTexture TextureL3;
     // The L2 texture is drawn second, i.e., as a HUD, in case of anything in L3.
-    windowTexture *TextureL2;
+    windowTexture TextureL2;
 
     friend class l2;
 };

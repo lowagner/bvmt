@@ -2,9 +2,15 @@
 
 #include "raylib.h"
 
+#include <algorithm> // std::fill
+
 BVMT
 
 WRAPPER(windowTexture, RenderTexture2D)
+
+windowTexture::windowTexture() {
+    std::fill(std::begin(Data), std::end(Data), 0);
+}
 
 windowTexture::windowTexture(windowResolution Resolution) {
     unwrap(This) = LoadRenderTexture(Resolution.Width, Resolution.Height);
@@ -16,13 +22,11 @@ windowTexture::~windowTexture() {
 
 SINGLETON_CC(window, {
     InitWindow(Resolution.Width, Resolution.Height, "bvmt");
-    TextureL3 = new windowTexture(DefaultWindowResolution);
-    TextureL2 = new windowTexture(DefaultWindowResolution);
+    TextureL3 = windowTexture(DefaultWindowResolution);
+    TextureL2 = windowTexture(DefaultWindowResolution);
 })
 
 window::~window() {
-    DELETE(TextureL2);
-    DELETE(TextureL3);
     CloseWindow();
 }
 

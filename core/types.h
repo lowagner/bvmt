@@ -30,14 +30,14 @@
 // We should never use WRAPPER with classes that can have children.
 // TODO: maybe fix the sizeof expressions to accomodate the vtable.
 #define WRAPPER(bvmtType, otherType) \
-    otherType &unwrap(bvmtType &Data) { \
+    inline otherType &unwrap(bvmtType &Data) { \
         static_assert( \
             sizeof(bvmtType) == sizeof(otherType), \
             "bvmt type " #bvmtType " does not match size of type " #otherType \
         ); \
         return (otherType &)Data; \
     } \
-    const otherType &unwrap(const bvmtType &Data) { \
+    inline const otherType &unwrap(const bvmtType &Data) { \
         static_assert( \
             sizeof(bvmtType) == sizeof(otherType), \
             "bvmt type " #bvmtType " does not match size of type " #otherType \
