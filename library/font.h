@@ -2,7 +2,7 @@
 
 #include "../core/types.h"
 
-NAMESPACE
+BVMT
 
 struct fontData { u8 Data[48]; };
 
@@ -17,4 +17,4 @@ private:
     fontData Data;
 };
 
-ECAPSEMAN
+TMVB

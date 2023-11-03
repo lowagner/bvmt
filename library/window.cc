@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 
-NAMESPACE
+BVMT
 
 WRAPPER(windowTexture, RenderTexture2D)
 
@@ -42,4 +42,4 @@ windowResolution window::resolution() const {
     return Resolution;
 }
 
-ECAPSEMAN
+TMVB

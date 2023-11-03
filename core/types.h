@@ -1,9 +1,7 @@
 #pragma once
 
-// TODO: rename to BVMT
-#define NAMESPACE namespace bvmt {
-// TODO: rename to TMVB
-#define ECAPSEMAN }
+#define BVMT namespace bvmt {
+#define TMVB }
 
 #define DELETE(x) {delete (x); (x) = Null;}
 
@@ -49,7 +47,7 @@
 
 #include <cstdint>
 
-NAMESPACE
+BVMT
 
 constexpr bool True = true;
 constexpr bool False = false;
@@ -69,4 +67,4 @@ typedef uint8_t u8;
 typedef float f32;
 typedef double f64;
 
-ECAPSEMAN
+TMVB

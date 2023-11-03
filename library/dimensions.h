@@ -2,7 +2,7 @@
 
 #include "../core/types.h"
 
-NAMESPACE
+BVMT
 
 template <class t>
 struct coordinates2 {
@@ -16,4 +16,4 @@ struct size2 {
     t Height = t();
 };
 
-ECAPSEMAN
+TMVB

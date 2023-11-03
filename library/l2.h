@@ -6,7 +6,7 @@
 
 #include "../core/types.h"
 
-NAMESPACE
+BVMT
 
 typedef coordinates2<i32> l2Position;
 
@@ -24,4 +24,4 @@ private:
 // TODO: when drawing an l2 in an l3, we need the l3 to own the texture
 // and draw it into the scene.
 
-ECAPSEMAN
+TMVB

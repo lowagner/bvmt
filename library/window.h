@@ -4,7 +4,7 @@
 
 #include "../core/types.h"
 
-NAMESPACE
+BVMT
 
 class l2;
 class l3;
@@ -42,4 +42,4 @@ private:
     friend class l2;
 };
 
-ECAPSEMAN
+TMVB

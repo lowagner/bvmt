@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 
-NAMESPACE
+BVMT
 
 WRAPPER(fontData, Font)
 
@@ -18,4 +18,4 @@ font::~font() {
     UnloadFont(unwrap(Data));
 }
 
-ECAPSEMAN
+TMVB
