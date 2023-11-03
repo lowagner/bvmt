@@ -16,17 +16,31 @@ windowTexture::windowTexture(windowResolution Resolution) {
     unwrap(This) = LoadRenderTexture(Resolution.Width, Resolution.Height);
 }
 
+textureBatcher windowTexture::batch() {
+    return pushPop(This);
+}
+
+void windowTexture::firstPush() {
+    BeginTextureMode(unwrap(This));        
+}
+
+void windowTexture::lastPop() {
+    EndTextureMode();
+}
+
 windowTexture::~windowTexture() {
     UnloadRenderTexture(unwrap(This)); 
 }
 
 SINGLETON_CC(window, {
     InitWindow(Resolution.Width, Resolution.Height, "bvmt");
-    TextureL3 = windowTexture(DefaultWindowResolution);
-    TextureL2 = windowTexture(DefaultWindowResolution);
+    TextureL3 = new windowTexture(DefaultWindowResolution);
+    TextureL2 = new windowTexture(DefaultWindowResolution);
 })
 
 window::~window() {
+    DELETE(TextureL2);
+    DELETE(TextureL3);
     CloseWindow();
 }
 

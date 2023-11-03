@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstdint> // int64_t, etc.
+#include <functional> // std::function
+
 #define BVMT namespace bvmt {
 #define TMVB }
 
@@ -30,22 +33,30 @@
 // We should never use WRAPPER with classes that can have children.
 // TODO: maybe fix the sizeof expressions to accomodate the vtable.
 #define WRAPPER(bvmtType, otherType) \
-    inline otherType &unwrap(bvmtType &Data) { \
+    inline otherType &unwrap(bvmtType &Bvmt) { \
         static_assert( \
-            sizeof(bvmtType) == sizeof(otherType), \
-            "bvmt type " #bvmtType " does not match size of type " #otherType \
+            sizeof(Bvmt.Data) == sizeof(otherType), \
+            "bvmt type " #bvmtType " Data does not match size of type " #otherType \
         ); \
-        return (otherType &)Data; \
+        return (otherType &)(Bvmt.Data); \
     } \
-    inline const otherType &unwrap(const bvmtType &Data) { \
+    inline const otherType &unwrap(const bvmtType &Bvmt) { \
         static_assert( \
-            sizeof(bvmtType) == sizeof(otherType), \
-            "bvmt type " #bvmtType " does not match size of type " #otherType \
+            sizeof(Bvmt.Data) == sizeof(otherType), \
+            "bvmt type " #bvmtType " Data does not match size of type " #otherType \
         ); \
-        return (const otherType &)Data; \
+        return (const otherType &)(Bvmt.Data); \
     }
 
-#include <cstdint>
+#define WRAPPER_DATA(x) public: u8 Data[x]; private:
+
+#define PUSHER_POPPER_H() \
+private: \
+    int PushCount = 0; \
+    void firstPush(); \
+    void lastPop(); \
+    template<typename t> \
+    friend class pushPop;
 
 BVMT
 
@@ -66,5 +77,8 @@ typedef uint8_t u8;
 
 typedef float f32;
 typedef double f64;
+
+template <class functionType>
+using fn = std::function<functionType>;
 
 TMVB

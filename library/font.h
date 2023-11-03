@@ -1,20 +1,28 @@
 #pragma once
 
+#include "dimensions.h"
+
 #include "../core/types.h"
 
 BVMT
 
-struct fontData { u8 Data[48]; };
+typedef size2<i32> fontSize;
 
-// TODO: should this be a singleton or some sort of font map so we don't
-//       constantly load/unload fonts?  or we can just pass around, e.g., `L2.draw(const font &F, ...)`
 struct font {
+    static fontSize DefaultSize;
+
     font();
     font(const char *FontName);
     ~font();
 
+    void size(fontSize New_Size);
+    fontSize size() const;
+
+    WRAPPER_DATA(48)
 private:
-    fontData Data;
+    float Multiplier = 1.0;
+    float Spacing = 0.0;
+    fontSize Size;
 };
 
 TMVB

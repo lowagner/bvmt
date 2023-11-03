@@ -4,18 +4,30 @@
 
 BVMT
 
-WRAPPER(fontData, Font)
+WRAPPER(font, Font)
 
-font::font() {
-    unwrap(Data) = LoadFont("../shared/resources/sono/Sono-Medium.ttf");
-}
+fontSize font::DefaultSize = fontSize{.Width = 15, .Height = 20};
+
+font::font()
+:   font("../shared/resources/sono/Sono-Medium.ttf")
+{}
 
 font::font(const char *FontName) {
-    unwrap(Data) = LoadFont(FontName);
+    unwrap(This) = LoadFont(FontName);
+    size(DefaultSize);
 }
 
 font::~font() {
-    UnloadFont(unwrap(Data));
+    UnloadFont(unwrap(This));
+}
+
+void font::size(fontSize New_Size) {
+    // TODO: figure out Multiplier & Spacing for desired pixel width/height
+    Size = New_Size;
+}
+
+fontSize font::size() const {
+    return Size;
 }
 
 TMVB

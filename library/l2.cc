@@ -4,14 +4,14 @@
 
 BVMT
 
-WRAPPER(windowTexture, RenderTexture2D)
-
 l2::l2() {
-    Texture = &window::get()->TextureL2;
+    Texture = window::get()->TextureL2;
 }
 
 void l2::writeToRow(const char *Chars) {
-    // TODO
+    if (Chars[0] == 0) return;
+    textureBatcher Batcher = Texture->batch();
+    // TODO:
 }
 
 TMVB

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dimensions.h"
+#include "push-pop.h"
 
 #include "../core/types.h"
 
@@ -8,16 +9,28 @@ BVMT
 
 class l2;
 class l3;
+class windowTexture;
 
 typedef size2<i32> windowResolution;
+typedef pushPop<windowTexture> textureBatcher;
 
 struct windowTexture {
     // This is a null texture that is ineligible to be drawn to.
     windowTexture();
     windowTexture(windowResolution Resolution);
     ~windowTexture();
-private:
-    u8 Data[20 * 2 + 4];
+
+    UNCOPYABLE_CLASS(windowTexture)
+    UNMOVABLE_CLASS(windowTexture) // for pushPop
+
+    // You can draw or write to this texture while this return value
+    // is in scope; when it descopes it will automatically close
+    // the write.  This is safe to call/nest multiple times for the
+    // same texture.
+    textureBatcher batch();
+
+    WRAPPER_DATA(20 * 2 + 4)
+    PUSHER_POPPER_H()
 };
 
 struct window {
@@ -37,9 +50,9 @@ struct window {
 private:
     windowResolution Resolution = DefaultWindowResolution;
     // The L3 texture is drawn first.
-    windowTexture TextureL3;
+    windowTexture *TextureL3;
     // The L2 texture is drawn second, i.e., as a HUD, in case of anything in L3.
-    windowTexture TextureL2;
+    windowTexture *TextureL2;
 
     friend class l2;
 };
