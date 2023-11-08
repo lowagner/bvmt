@@ -14,10 +14,11 @@ class windowTexture;
 typedef size2<i32> windowResolution;
 typedef pushPop<windowTexture> textureBatcher;
 
-struct windowTexture {
+struct windowTexture
+{   // A texture that the window can draw.
+    windowTexture(windowResolution Resolution);
     // This is a null texture that is ineligible to be drawn to.
     windowTexture();
-    windowTexture(windowResolution Resolution);
     ~windowTexture();
 
     UNCOPYABLE_CLASS(windowTexture)
@@ -33,8 +34,9 @@ struct windowTexture {
     PUSHER_POPPER_H()
 };
 
-struct window {
-    static constexpr windowResolution DefaultWindowResolution
+struct window
+{   // Represents a physical window for the program.
+    static constexpr windowResolution DefaultResolution
         =   windowResolution{.Width = 800, .Height = 450};
     SINGLETON_H(window)
     ~window();
@@ -48,7 +50,7 @@ struct window {
     // TODO: `void clear(color Color)`
     // TODO: probably need a `void needsRedraw()`
 private:
-    windowResolution Resolution = DefaultWindowResolution;
+    windowResolution Resolution = DefaultResolution;
     // The L3 texture is drawn first.
     windowTexture *TextureL3;
     // The L2 texture is drawn second, i.e., as a HUD, in case of anything in L3.

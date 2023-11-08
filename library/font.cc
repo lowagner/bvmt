@@ -12,22 +12,22 @@ font::font()
 :   font("../shared/resources/sono/Sono-Medium.ttf")
 {}
 
-font::font(const char *FontName) {
-    unwrap(This) = LoadFont(FontName);
+font::font(const char *FontName)
+{   unwrap(This) = LoadFont(FontName);
     size(DefaultSize);
 }
 
-font::~font() {
-    UnloadFont(unwrap(This));
+font::~font()
+{   UnloadFont(unwrap(This));
 }
 
-void font::size(fontSize New_Size) {
-    // TODO: figure out Multiplier & Spacing for desired pixel width/height
+void font::size(fontSize New_Size)
+{   // TODO: figure out Multiplier & Spacing for desired pixel width/height
     Size = New_Size;
 }
 
-fontSize font::size() const {
-    return Size;
+fontSize font::size() const
+{   return Size;
 }
 
 TMVB

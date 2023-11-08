@@ -10,8 +10,8 @@ BVMT
 
 typedef coordinates2<i32> l2Position;
 
-struct l2 {
-    const font *Font = Null;
+struct l2
+{   const font *Font = Null;
     l2Position Position;
     // TODO: `rgba Foreground;`
     // TODO: `rgba Background;`

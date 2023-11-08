@@ -8,8 +8,8 @@ BVMT
 
 typedef size2<i32> fontSize;
 
-struct font {
-    static fontSize DefaultSize;
+struct font
+{   static fontSize DefaultSize;
 
     font();
     font(const char *FontName);
