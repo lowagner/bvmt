@@ -14,10 +14,10 @@ const char *const ArrayViewEmptyMsg = "arrayView is empty";
 
 #ifndef NDEBUG
 using test::noisy;
-void test_core__array()
+void test__core__array()
 {   TEST
-    (   // can create array from an iterator implicitly, both by move construction and assignment
-        // as well as +=
+    (   "can create array from an iterator implicitly via move",
+        // both by move construction and assignment as well as +=
         array<noisy> Array(std::move(test::noisyIterator(5)));
         int I = 5;
         for (noisy &A : Array.values())
@@ -87,7 +87,8 @@ void test_core__array()
     );
 
     TEST
-    (   // can create array from a const iterator implicitly, both by move construction and assignment
+    (   "can create array from a const iterator implicitly with r-value",
+        // both by move construction and assignment.
         // testing an implicit r-value here rather than an explicit move:
         array<int> Array(iterator<int>::range(30));
         int I = 0;
@@ -122,16 +123,16 @@ void test_core__array()
     );
 
     TEST
-    (   // can + and += correctly on another array:
+    (   "can + and += correctly on another array",
         TEST
-        (   // can += correctly
+        (   "can += correctly",
             array<int> Array({1, 2, 3, 4, 5});
             Array += array<int>({10, 11, 12});
             EXPECT_EQUAL(Array, array<int>({1, 2, 3, 4, 5, 10, 11, 12}));
         );
 
         TEST
-        (   // can + correctly on another array:
+        (   "can + correctly on another array",
             array<int> Array;
             EXPECT_EQUAL(Array.count(), 0);
             Array = array<int>({1, 2, 3, 4, 5}) + array<dbl>({9.3, 10.1, 11.9});
@@ -140,9 +141,9 @@ void test_core__array()
     );
 
     TEST
-    (   // Index access via get()
+    (   "index access via get()",
         TEST
-        (   // Works for getting elements inside the array
+        (   "works for getting elements inside the array",
             array<int> Array({5, 10, 15});
 
             EXPECT_POINTER_EQUAL(Array.get(0), 5);
@@ -154,7 +155,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Does NOT resize Array when getting an index above current size
+        (   "does NOT resize Array when getting an index above current size",
             array<int> Array;
             EXPECT_EQUAL(Array.count(), 0);
 
@@ -168,7 +169,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Complains about too negative indexing when getting
+        (   "complains about too negative indexing when getting",
             array<int> Array;
 
             EXPECT_THROW(*Array.get(-1), ArrayTooNegativeIndexErrorMsg);
@@ -181,7 +182,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Negative indexing works as expected
+        (   "negative indexing works as expected",
             array<int> Array({0, 1, 2, 3});
 
             EXPECT_POINTER_EQUAL(Array.get(-1), 3);
@@ -194,9 +195,9 @@ void test_core__array()
     );
 
     TEST
-    (   // Index access via operator[]
+    (   "index access via operator[]",
         TEST
-        (   // Resizes Array when setting an index above current size
+        (   "resizes Array when setting an index above current count",
             array<int> Array;
             EXPECT_EQUAL(Array.count(), 0);
 
@@ -210,7 +211,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Resizes Array when setting an index JUST above current size,
+        (   "resizes Array when setting an index JUST above current count",
             // plus checking in on memory management (new/delete).
             {   array<noisy> Array;
                 Array.reserve(2);
@@ -263,7 +264,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Resizes Array when setting an index far above current size,
+        (   "resizes Array when setting an index far above current size",
             // also memory management
             {   array<noisy> Array;
                 Array.reserve(5);
@@ -305,7 +306,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Does not resize const array when getting an index above current size
+        (   "does not resize const array when getting an index above current size",
             const array<int> Array;
             EXPECT_EQUAL(Array.count(), 0);
 
@@ -318,7 +319,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Complains about too negative indexing when getting
+        (   "complains about too negative indexing when getting",
             const array<int> Array;
 
             EXPECT_THROW(Array[-1], ArrayTooNegativeIndexErrorMsg);
@@ -331,7 +332,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Setting the -1'th element just hits the end of the Array:
+        (   "setting the -1'th element just hits the end of the Array",
             array<int> Array;
             Array[0] = 1200;
             EXPECT_EQUAL(Array[-1], 1200);
@@ -346,7 +347,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Negative indexing works as expected
+        (   "negative indexing works as expected",
             array<int> Array;
             Array[0] = 0;
             Array[1] = 1;
@@ -371,7 +372,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Does complain about setting too negative values
+        (   "does complain about setting too negative values",
             array<int> Array;
 
             Array[0] = 0;
@@ -385,9 +386,9 @@ void test_core__array()
     );
 
     TEST
-    (   // array swap
+    (   "array swap",
         TEST
-        (   // using std::swap doesn't recreate internal objects
+        (   "using std::swap doesn't recreate internal objects",
             array<noisy> Array1({noisy(3), noisy(40), noisy(500), noisy(1000)});
             array<noisy> Array2({noisy(5), noisy(6), noisy(7)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction
@@ -401,7 +402,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Can swap out within current size of array
+        (   "can swap out within current size of array",
             array<noisy> Array({noisy(3), noisy(40), noisy(500)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction
 
@@ -427,7 +428,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Can swap out above current count of array
+        (   "can swap out above current count of array",
             array<noisy> Array({noisy(3), noisy(40), noisy(500)});
             Array.reserve(6);
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction/moving
@@ -458,7 +459,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Can swap out negative indices, if they are not too negative
+        (   "can swap out negative indices, if they are not too negative",
             array<noisy> Array({noisy(3), noisy(40), noisy(500)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction
 
@@ -492,9 +493,9 @@ void test_core__array()
     );
 
     TEST
-    (   // array swapIndices
+    (   "array swapIndices",
         TEST
-        (   // Can swap out within current count of array
+        (   "can swap out within current count of array",
             array<noisy> Array({noisy(3), noisy(40), noisy(500)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction
 
@@ -517,7 +518,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Can swap out above current count of array
+        (   "can swap out above current count of array",
             array<noisy> Array({noisy(3), noisy(40), noisy(500)});
             Array.reserve(6);
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction/moving
@@ -547,7 +548,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Order doesn't matter when swapping a negative index and a larger index.
+        (   "order doesn't matter when swapping a negative index and a larger index",
             array<noisy> Array1({noisy(3), noisy(40), noisy(500)});
             Array1.reserve(6);
             array<noisy> Array2({noisy(3), noisy(40), noisy(500)});
@@ -595,7 +596,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Can swap out negative indices, if they are not too negative
+        (   "can swap out negative indices, if they are not too negative",
             array<noisy> Array({noisy(3), noisy(40), noisy(500)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction
 
@@ -614,7 +615,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Too negative indices will throw and will not modify the array:
+        (   "too negative indices will throw and will not modify the array",
             array<noisy> Array({noisy(3), noisy(40), noisy(500)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction
 
@@ -642,7 +643,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Same index (positive+positive, negative and positive, or negative+negative) does nothing
+        (   "same index (positive+positive, negative and positive, or negative+negative) does nothing",
             array<noisy> Array({noisy(3), noisy(40), noisy(500)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // Ignore construction
 
@@ -665,9 +666,9 @@ void test_core__array()
     );
 
     TEST
-    (   // array append
+    (   "array append",
         TEST
-        (   // Works for simple type
+        (   "works for simple type",
             array<int> Array;
             Array.append(3);
             EXPECT_EQUAL(Array.count(), 1);
@@ -684,7 +685,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Works with emplace on more complicated Type
+        (   "works with emplace on more complicated type",
             {   array<noisy> Array;
                 Array.reserve(3); // to avoid creating/destroying when reallocating internally
                 EXPECT_EQUAL(Array.count(), 0);
@@ -717,11 +718,11 @@ void test_core__array()
     );
 
     TEST
-    (   // array popping
+    (   "array popping",
         TEST
-        (   // pop() without an argument
+        (   "pop() without an argument",
             TEST
-            (   // Removes last element from Array
+            (   "removes last element from Array",
                 array<const char *> Array;
                 Array[0] = "hello";
                 Array[1] = "world!";
@@ -739,7 +740,7 @@ void test_core__array()
             );
 
             TEST
-            (   // Complains if nothing is in the Array
+            (   "complains if nothing is in the Array",
                 array<const char *> Array;
                 EXPECT_THROW(Array.pop(), ArrayPoppingErrorMsg);
 
@@ -749,7 +750,7 @@ void test_core__array()
             );
 
             TEST
-            (   // Does not copy the last value; pop moves it.
+            (   "does not copy the last value; pop moves it",
                 {   array<noisy> Array;
                     Array[0] = noisy(100);
                     EXPECT_EQUAL(TestPrintOutput.pull(),
@@ -772,9 +773,9 @@ void test_core__array()
         );
 
         TEST
-        (   // pop() with an argument
+        (   "pop() with an argument",
             TEST
-            (   // Removes relevant element from Array
+            (   "removes relevant element from Array",
                 array<const char *> Array;
                 Array[0] = "hello";
                 Array[1] = "world!";
@@ -793,13 +794,13 @@ void test_core__array()
             );
 
             TEST
-            (   // Complains if nothing is in the Array
+            (   "complains if nothing is in the Array",
                 array<const char *> Array;
                 EXPECT_THROW(Array.pop(1), ArrayPoppingErrorMsg);
             );
 
             TEST
-            (   // Complains if index is too high:
+            (   "complains if index is too high",
                 array<const char *> Array;
                 Array[0] = "hello!";
                 EXPECT_THROW(Array.pop(10), ArrayPoppingErrorMsg);
@@ -807,7 +808,7 @@ void test_core__array()
             );
 
             TEST
-            (   // Does not copy the popped value; pop moves it.
+            (   "does not copy the popped value; pop moves it",
                 {   array<noisy> Array;
                     Array[0] = noisy(100);
                     Array[1] = noisy(200);
@@ -827,22 +828,22 @@ void test_core__array()
     );
 
     TEST
-    (   // Insert
+    (   "insert",
         TEST
-        (   // Insert with negative index doesn't work if Array is empty
+        (   "insert with negative index doesn't work if Array is empty",
             array<int> Array;
             EXPECT_THROW(Array.insert(-1, 1234), ArrayTooNegativeIndexErrorMsg);
         );
 
         TEST
-        (   // Insert with zero times does nothing
+        (   "insert with zero times does nothing",
             array<int> Array;
             Array.insert(0, 1234, 0);
             EXPECT_EQUAL(Array.count(), 0);
         );
 
         TEST
-        (   // Insert past the end of the array resizes the array.
+        (   "insert past the end of the array resizes the array",
             {   // Insert with the default Count (== 1).
                 array<int> Array;
                 Array.insert(0, 1234);
@@ -873,7 +874,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Insert with default times adds one element
+        (   "insert with default times adds one element",
             array<int> Array;
             Array.insert(0, 100);
             EXPECT_EQUAL(Array.count(), 1);
@@ -892,7 +893,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Insert with specified times adds that many elements
+        (   "insert with specified times adds that many elements",
             array<int> Array;
             Array.insert(0, 100, 2);
             EXPECT_EQUAL(Array.count(), 2);
@@ -919,9 +920,9 @@ void test_core__array()
     );
 
     TEST
-    (   // remove
+    (   "remove",
         TEST
-        (   // remove with no valid candidates returns 0 and doesn't modify array
+        (   "remove with no valid candidates returns 0 and doesn't modify array",
             array<int> Array({1, 2, 3, 5, 10, 12, 410});
             EXPECT_EQUAL(Array.remove(12345), 0);
             EXPECT_EQUAL(Array, array<int>({1, 2, 3, 5, 10, 12, 410}));
@@ -932,7 +933,7 @@ void test_core__array()
         );
 
         TEST
-        (   // remove with one valid candidate returns 1 and modifies array
+        (   "remove with one valid candidate returns 1 and modifies array",
             array<int> Array({1, 2, 3, 5, 10, 12, 410});
             EXPECT_EQUAL(Array.remove(5), 1);
             EXPECT_EQUAL(Array, array<int>({1, 2, 3, 10, 12, 410}));
@@ -943,7 +944,7 @@ void test_core__array()
         );
 
         TEST
-        (   // remove with multiple valid candidate returns that count
+        (   "remove with multiple valid candidate returns that count",
             array<int> Array({5, 3, 5, 5, 5, 5, 2, 1, 5});
             EXPECT_EQUAL(Array.remove(5), 6);
             EXPECT_EQUAL(Array, array<int>({3, 2, 1}));
@@ -955,15 +956,15 @@ void test_core__array()
     );
 
     TEST
-    (   // erase
+    (   "erase",
         TEST
-        (   // Erase with negative index doesn't work if Array is empty
+        (   "erase with negative index doesn't work if Array is empty",
             array<int> Array;
             EXPECT_THROW(Array.erase(-1, 1234), ArrayTooNegativeIndexErrorMsg);
         );
 
         TEST
-        (   // Erase with negative index works if Array has elements
+        (   "erase with negative index works if Array has elements",
             array<int> Array({1, 2, 3, 4, 5, 6, 7, 8});
             Array.erase(-1);
             EXPECT_EQUAL(Array, array<int>({1, 2, 3, 4, 5, 6, 7}));
@@ -976,7 +977,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Erase with zero count does nothing
+        (   "erase with zero count does nothing",
             array<int> Array;
             Array[0] = 0;
             Array[1] = 1;
@@ -996,7 +997,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Erase with default count removes one element
+        (   "erase with default count removes one element",
             array<int> Array;
             for (int I = 0; I < 10; ++I)
             {   Array[I] = I;
@@ -1022,7 +1023,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Erase with specified count deletes that many elements
+        (   "erase with specified count deletes that many elements",
             array<int> Array;
             for (int I = 0; I < 100; ++I)
             {   Array[I] = I;
@@ -1045,9 +1046,9 @@ void test_core__array()
     );
 
     TEST
-    (   // findFirst 
+    (   "findFirst",
         TEST
-        (   // findFirst with no array elements returns false
+        (   "findFirst with no array elements returns false",
             array<int> Array;
             index Index = -1;
             EXPECT_EQUAL(Array.findFirst(100, determining(Index)), False);
@@ -1061,7 +1062,7 @@ void test_core__array()
         );
 
         TEST
-        (   // findFirst with no match returns false and does not change Index
+        (   "findFirst with no match returns false and does not change Index",
             array<int> Array({0, 100, 22, 3000, 44, 5005, 60006});
             EXPECT_EQUAL(Array.count(), 7);
             index Index = -1;
@@ -1076,7 +1077,7 @@ void test_core__array()
         );
 
         TEST
-        (   // findFirst returns match
+        (   "findFirst returns match",
             array<int> Array({-1, 100, 22, 3000, 44, 5005, 60006, 7});
             EXPECT_EQUAL(Array.count(), 8);
             for (index I = 0; I < Array.count(); ++I)
@@ -1089,7 +1090,7 @@ void test_core__array()
         );
 
         TEST
-        (   // findFirst returns first match
+        (   "findFirst returns first match",
             array<int> Array({0, 1, 2, 2, 2, 3, 4, 5, 6, 2, 2, 2, 3, 0, 3, 1});
             index Index = -1;
             EXPECT_EQUAL(Array.findFirst(0, determining(Index)), True);
@@ -1106,15 +1107,15 @@ void test_core__array()
     );
 
     TEST
-    (   // array reversing
+    (   "array reversing",
         TEST
-        (   // returns pointer to original array
+        (   "returns pointer to original array",
             array<int> Array({1000,2,3,4,5,6,700});
             EXPECT_EQUAL(&Array.reverse(), &Array);
         );
 
         TEST
-        (   // reverses array
+        (   "reverses array",
             array<int> Array({1000,2,3,40,500,6,700});
             EXPECT_EQUAL
             (   Array.reverse(),
@@ -1124,15 +1125,15 @@ void test_core__array()
     );
 
     TEST
-    (   // array sorting
+    (   "array sorting",
         TEST
-        (   // returns pointer to original array
+        (   "returns pointer to original array",
             array<int> Array({1,2,3,4,5,-5,-4,-3,-2,0,-1});
             EXPECT_EQUAL(&Array.sort(), &Array);
         );
 
         TEST
-        (   // sorts array
+        (   "sorts array",
             array<int> Array({1,2,3,4,5,-5,-4,-3,-2,0,-1});
             EXPECT_EQUAL
             (   Array.sort(),
@@ -1142,9 +1143,9 @@ void test_core__array()
     );
 
     TEST
-    (   // array resize via array::count(index) TEST
+    (   "array resize via array::count(index)",
         TEST
-        (   // Works for simple type
+        (   "works for simple type",
             array<int> Array;
             EXPECT_EQUAL(Array.count(), 0);
 
@@ -1158,7 +1159,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Works for more complicated type
+        (   "works for more complicated type",
             {   array<noisy> Array;
                 Array.count(2);
                 EXPECT_EQUAL(TestPrintOutput.pull(), "noisy(-1)noisy(-1)");
@@ -1175,7 +1176,7 @@ void test_core__array()
     );
 
     TEST
-    (   // array equality -- test using == directly, since checkEquals can override.
+    (   "array equality -- test using == directly, since checkEquals can override.",
         EXPECT_EQUAL(array<int>({5, 4, 3, 2}) == array<int>({5, 4, 3, 2}), True);
         EXPECT_EQUAL(array<int>({5, 4, 3, 20}) == array<int>({5, 4, 3, 2}), False);
         // check shorter/bigger sizes:
@@ -1191,9 +1192,9 @@ void test_core__array()
     );
 
     TEST
-    (   // array iteration via for-loops
+    (   "array iteration via for-loops",
         TEST
-        (   // Empty array iterates fine
+        (   "empty array iterates fine",
             array<int> Array;
             int I = 0;
             for (int &A : Array.values())
@@ -1204,7 +1205,7 @@ void test_core__array()
         );
 
         TEST
-        (   // iteration via `values()`
+        (   "iteration via `values()`",
             array<int> Array({1, 5, 0, 4, 3, 1, 15});
             array<int> IterationResults;
             for (int A : Array.values())
@@ -1214,7 +1215,7 @@ void test_core__array()
         );
 
         TEST
-        (   // iteration via `values()` gives const references if array is const.
+        (   "iteration via `values()` gives const references if array is const.",
             array<noisy> Array({noisy(0), noisy(1), noisy(2)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction logic
 
@@ -1229,7 +1230,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Mutating the array while iterating
+        (   "mutating the array while iterating",
             array<noisy> Array({noisy(0), noisy(1), noisy(2)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction noise
 
@@ -1244,7 +1245,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Mutating the array via elements()
+        (   "mutating the array via elements()",
             array<noisy> Array({noisy(0), noisy(1), noisy(2)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction noise
 
@@ -1261,7 +1262,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Iterating the array via constant().elements()
+        (   "iterating the array via constant().elements()",
             array<noisy> Array({noisy(0), noisy(1), noisy(2)});
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction noise
 
@@ -1279,9 +1280,9 @@ void test_core__array()
     );
 
     TEST
-    (   // FixedCount array
+    (   "fixedCount array",
         TEST
-        (   // can be created via array::fixedCount
+        (   "can be created via array::fixedCount",
             auto Fixed = array<int>::fixedCount(10);
            
             // Default value is the the default-constructed value:
@@ -1296,7 +1297,7 @@ void test_core__array()
         );
 
         TEST
-        (   // can be created via array::fixCount
+        (   "can be created via array::fixCount",
             array<int> Fixed;
             Fixed.count(31);
 
@@ -1309,7 +1310,7 @@ void test_core__array()
         );
 
         TEST
-        (   // errors when append/reserve/remove/erase/insert/pop/access-over-bounds happens
+        (   "errors when append/reserve/remove/erase/insert/pop/access-over-bounds happens",
             auto Fixed = array<dbl>::fixedCount(7);
             Fixed[3] = 3000;
 
@@ -1331,7 +1332,7 @@ void test_core__array()
         );
 
         TEST
-        (   // can swap items, even sort
+        (   "can swap items, even sort",
             auto Fixed = array<int>::fixedCount(5);
 
             Fixed[0] = +100;
@@ -1351,7 +1352,7 @@ void test_core__array()
         );
         
         TEST
-        (   // can grab items as long as they are not above bounds
+        (   "can grab items as long as they are not above bounds",
             auto Fixed = array<dbl>::fixedCount(11);
 
             Fixed[1] = 100.0;
@@ -1369,7 +1370,7 @@ void test_core__array()
         );
 
         TEST
-        (   // can get() values, even above bounds
+        (   "can get() values, even above bounds",
             auto Fixed = array<dbl>::fixedCount(3);
 
             *Fixed.get(0) = -0.5;
@@ -1387,7 +1388,7 @@ void test_core__array()
         );
 
         TEST
-        (   // FixedCount is sticky to variables when copied
+        (   "FixedCount is sticky to variables when copied",
             auto Fixed = array<int>::fixedCount(8);
             auto NotFixed = array<int>({0,1,2,3,4,5,6,7});
 
@@ -1411,7 +1412,7 @@ void test_core__array()
         );
 
         TEST
-        (   // FixedCount array may truncate when copying in other size array:
+        (   "fixedCount array may truncate when copying in other size array:",
             auto Fixed = array<int>({1,2,3,4});
             Fixed.fixCount();
 
@@ -1427,7 +1428,7 @@ void test_core__array()
         );
 
         TEST
-        (   // FixedCount is sticky to variables when moved
+        (   "fixedCount is sticky to variables when moved",
             auto Fixed = array<int>::fixedCount(8);
             auto NotFixed = array<int>({0,1,2,3,4,5,6,7});
 
@@ -1450,7 +1451,7 @@ void test_core__array()
         );
 
         TEST
-        (   // FixedCount array may truncate when moving in other size array:
+        (   "fixedCount array may truncate when moving in other size array:",
             auto Fixed = array<int>({1,2,3,4});
             Fixed.fixCount();
 
@@ -1466,7 +1467,7 @@ void test_core__array()
         );
 
         TEST
-        (   // FixedCount is sticky to variables when swapped
+        (   "fixedCount is sticky to variables when swapped",
             auto Fixed = array<noisy>({noisy(-1), noisy(-2), noisy(-3)});
             Fixed.fixCount();
             auto NotFixed = array<noisy>({noisy(5), noisy(6), noisy(7)});
@@ -1509,7 +1510,7 @@ void test_core__array()
         );
 
         TEST
-        (   // errors when swapping non-compatible sized arrays if one (or both) is FixedCount
+        (   "errors when swapping non-compatible sized arrays if one (or both) is FixedCount",
             auto Fixed = array<int>::fixedCount(3);
             Fixed[1] = 101;
             auto NotFixed = array<int>({0,1,2,3,4});
@@ -1535,7 +1536,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Mutating the array while iterating
+        (   "mutating the array while iterating",
             array<noisy> Array({noisy(0), noisy(1), noisy(2)});
             Array.fixCount();
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction noise
@@ -1551,7 +1552,7 @@ void test_core__array()
         );
 
         TEST
-        (   // Mutating the array via elements()
+        (   "mutating the array via elements()",
             array<noisy> Array({noisy(0), noisy(1), noisy(2)});
             Array.fixCount();
             ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction noise
@@ -1570,9 +1571,9 @@ void test_core__array()
     );
 
     TEST
-    (   // arrayView
+    (   "arrayView",
         TEST
-        (   // count() works for different sized elements
+        (   "count() works for different sized elements",
             {   array<u8> Array({0, 1, 2, 3, 4});
                 EXPECT_EQUAL(Array.view().count(), 5);
                 EXPECT_EQUAL(constant(Array).view().count(), 5);
@@ -1590,7 +1591,7 @@ void test_core__array()
         );
 
         TEST
-        (   // empty() works for different sized elements
+        (   "empty() works for different sized elements",
             {   array<u8> Array({0, 1, 2, 3, 4});
                 EXPECT_EQUAL(Array.view().empty(), False);
                 EXPECT_EQUAL(constant(Array).view().empty(), False);
@@ -1613,9 +1614,9 @@ void test_core__array()
         )
 
         TEST
-        (   // shiftView() works for different sized elements
+        (   "shiftView() works for different sized elements",
             TEST
-            (   // works for non-const arrayViews:
+            (   "works for non-const arrayViews:",
                 {   array<u8> Array({0, 1, 2, 3, 4});
                     arrayView<u8> ArrayView = Array.view();
 
@@ -1644,7 +1645,7 @@ void test_core__array()
             );
 
             TEST
-            (   // works for const arrayViews:
+            (   "works for const arrayViews:",
                 {   array<u8> Array({0, 1, 2, 3, 4});
                     arrayView<const u8> ArrayView = constant(Array).view();
 
@@ -1671,9 +1672,9 @@ void test_core__array()
         );
 
         TEST
-        (   // popView() works for different sized elements
+        (   "popView() works for different sized elements",
             TEST
-            (   // works for non-const arrayViews:
+            (   "works for non-const arrayViews:",
                 {   array<u8> Array({0, 1, 2, 3, 4});
                     arrayView<u8> ArrayView = Array.view();
 
@@ -1702,7 +1703,7 @@ void test_core__array()
             );
 
             TEST
-            (   // works for const arrayViews:
+            (   "works for const arrayViews:",
                 {   array<u8> Array({0, 1, 2, 3, 4});
                     arrayView<const u8> ArrayView = constant(Array).view();
 
