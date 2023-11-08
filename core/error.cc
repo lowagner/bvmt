@@ -7,27 +7,27 @@ error::error(const char *M, const char *A) throw() : Message(M), At(A) {}
 error::error(std::string M, std::string A) throw() : Message(M), At(A) {}
 error::error(const char *M, std::string A) throw() : Message(M), At(A) {}
 
-const char* error::what() const throw() {
-    return Message.c_str();
+const char* error::what() const throw()
+{   return Message.c_str();
 }
 
 capturer::capturer(std::ostream &Os)
 :   Ostream(Os), Out(), OldBuffer(Ostream.rdbuf(Out.rdbuf()))
 {}
 
-capturer::~capturer() {
-    stopCapture();
+capturer::~capturer()
+{   stopCapture();
 }
 
-std::string capturer::pull() {
-    std::string Output = Out.str();
+std::string capturer::pull()
+{   std::string Output = Out.str();
     Out.str("");
     return Output;
 }
 
-void capturer::stopCapture() {
-    if (OldBuffer) {
-        Ostream.rdbuf(OldBuffer);
+void capturer::stopCapture()
+{   if (OldBuffer)
+    {   Ostream.rdbuf(OldBuffer);
         OldBuffer = Null;
     }
 }

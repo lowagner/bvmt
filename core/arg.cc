@@ -6,6 +6,7 @@
 #endif
 
 BVMT
+
 #ifndef NDEBUG
 using test::noisy;
 void test__core__arg()

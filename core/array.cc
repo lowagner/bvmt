@@ -1703,7 +1703,7 @@ void test__core__array()
             );
 
             TEST
-            (   "works for const arrayViews:",
+            (   "works for const arrayViews",
                 {   array<u8> Array({0, 1, 2, 3, 4});
                     arrayView<const u8> ArrayView = constant(Array).view();
 
