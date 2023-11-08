@@ -16,8 +16,8 @@
 
 #define SINGLETON_CC(x, initLogic) \
     x::x() initLogic \
-    x *x::get() { \
-        if (Instance == Null) \
+    x *x::get() \
+    {   if (Instance == Null) \
             Instance = new x(); \
         return Instance; \
     }  \
@@ -31,18 +31,18 @@
     private:
 
 #define ABSTRACT_SINGLETON_CC(x) \
-    x::x(x *ChildInstance) { \
-        ASSERT(ChildInstance != Null); \
+    x::x(x *ChildInstance) \
+    {   ASSERT(ChildInstance != Null); \
         ASSERT(Instance == Null); \
         Instance = ChildInstance; \
     } \
-    x::~x() { \
-        /* This triggers within the child class to remove the instance
+    x::~x() \
+    {   /* This triggers within the child class to remove the instance
            if the child class was the currently active instance of this abstract base class. */ \
         if (Instance == this) Instance = Null; \
     } \
-    x *x::get() { \
-        if (Instance == Null) \
+    x *x::get() \
+    {   if (Instance == Null) \
             throw error("Instantiate a child class of " #x " first.", AT); \
         return Instance; \
     }  \
@@ -59,15 +59,15 @@
 // We should never use WRAPPER with classes that can have children.
 // TODO: maybe fix the sizeof expressions to accomodate the vtable.
 #define WRAPPER(bvmtType, otherType) \
-    inline otherType &unwrap(bvmtType &Bvmt) { \
-        static_assert( \
+    inline otherType &unwrap(bvmtType &Bvmt) \
+    {   static_assert( \
             sizeof(Bvmt.Data) == sizeof(otherType), \
             "bvmt type " #bvmtType " Data does not match size of type " #otherType \
         ); \
         return (otherType &)(Bvmt.Data); \
     } \
-    inline const otherType &unwrap(const bvmtType &Bvmt) { \
-        static_assert( \
+    inline const otherType &unwrap(const bvmtType &Bvmt) \
+    {   static_assert( \
             sizeof(Bvmt.Data) == sizeof(otherType), \
             "bvmt type " #bvmtType " Data does not match size of type " #otherType \
         ); \
@@ -130,20 +130,20 @@ template <class t>
 struct typeDefault<t, True> {};
 
 template <class t>
-struct typeDefault<t, False> {
-    static const t DefaultInstance;
+struct typeDefault<t, False>
+{   static const t DefaultInstance;
 };
 
 template <class t>
-struct typeData {
-    // Specializations for data-like constexpr values.  See
+struct typeData
+{   // Specializations for data-like constexpr values.  See
     // https://stackoverflow.com/a/35974120 for why we do this.
     static constexpr index WrapperMemoryBytes = 0;
 };
 
 template <class t>
-struct typePointer {
-    // Specializations for pointer-like constexpr values.  See
+struct typePointer
+{   // Specializations for pointer-like constexpr values.  See
     // https://stackoverflow.com/a/35974120 for why we do this.
     // References and pointers are pointer-like:
     static constexpr bool IsPointerLike = std::is_reference<t>::value || std::is_pointer<t>::value;
@@ -161,26 +161,26 @@ struct typePointer {
 };
 
 template<class t>
-struct typeFunction {
-    template <class ...Args>
+struct typeFunction
+{   template <class ...Args>
     using callableReturn = std::invoke_result_t<t, Args...>;
 };
 
 template<class t, class u>
-struct typeFunction<t(u)> {
-    typedef u functionArgument;
+struct typeFunction<t(u)>
+{   typedef u functionArgument;
     typedef t functionReturn;
 };
 
 template<class t, class u>
-struct typeFunction<fn<t(u)>> {
-    typedef u functionArgument;
+struct typeFunction<fn<t(u)>>
+{   typedef u functionArgument;
     typedef t functionReturn;
 };
 
 template <bool Value, class t, class u>
-struct maybe {
-    typedef std::conditional_t<Value, t, u> type;
+struct maybe
+{   typedef std::conditional_t<Value, t, u> type;
 };
 
 template <class t>
@@ -212,39 +212,39 @@ struct type
     static constexpr bool IsCPointer = std::is_pointer<t>::value;
     static constexpr bool IsCppPointer = std::is_pointer<t>::value || std::is_reference<t>::value;
 
-    static constexpr t min() {
-        return std::numeric_limits<t>::min();
+    static constexpr t min()
+    {   return std::numeric_limits<t>::min();
     }
-    static constexpr t max() {
-        return std::numeric_limits<t>::max();
+    static constexpr t max()
+    {   return std::numeric_limits<t>::max();
     }
 
     template <class u>
-    static constexpr t clamp(u U) {
-        if (U > max()) {
-            return max();
+    static constexpr t clamp(u U)
+    {   if (U > max())
+        {   return max();
         }
-        if (U < min()) {
-            return min();
+        if (U < min())
+        {   return min();
         }
         return t(U);
     }
 
     template <class u>
-    static constexpr bool equals() {
-        return std::is_same<t, u>::value;
+    static constexpr bool equals()
+    {   return std::is_same<t, u>::value;
     }
 
     template <class u>
-    static constexpr bool extends() {
-        return std::is_base_of<u, t>::value;
+    static constexpr bool extends()
+    {   return std::is_base_of<u, t>::value;
     }
 };
 
 
 template <class t>
-t sign(const t &T) {
-    static_assert(!type<t>::IsUnsigned, "need a signed type here.");
+t sign(const t &T)
+{   static_assert(!type<t>::IsUnsigned, "need a signed type here.");
     return T == t(0) ? t(0) : T > t(0) ? t(1) : t(-1);
 }
 
@@ -261,8 +261,8 @@ template <class t>
 const t typeDefault<t, False>::DefaultInstance = t();
 
 template <class t>
-struct typePointer<pointer<t>> {
-    static constexpr bool IsPointerLike = True;
+struct typePointer<pointer<t>>i
+{   static constexpr bool IsPointerLike = True;
     static constexpr bool IsPointer = True;
     typedef t pointingAt;
 };
@@ -319,17 +319,17 @@ struct typePointer<pointer<t>> {
     type &operator = (const type &ExistingInstance) = delete;
 
 #define SET_EQUAL_GUARD(Other, do_this) \
-    if ((void *)&Other != (void*)this) { \
-        do_this; \
+    if ((void *)&Other != (void*)this) \
+    {   do_this; \
     } \
     return This
 
 #define COPYABLE_TEMPLATE(x, X, startingLogicForAssignment, logic) \
-    x(const x &X) { \
-        logic; \
+    x(const x &X) \
+    {   logic; \
     } \
-    x &operator = (const x &X) { \
-        SET_EQUAL_GUARD(X, startingLogicForAssignment; logic); \
+    x &operator = (const x &X) \
+    {   SET_EQUAL_GUARD(X, startingLogicForAssignment; logic); \
     }
 
 #define COPYABLE_H(x, X) \
@@ -337,19 +337,19 @@ struct typePointer<pointer<t>> {
     x &operator = (const x &X);
 
 #define COPYABLE_CC(x, X, startingLogicForAssignment, logic) \
-    x::x(const x &X) { \
-        logic; \
+    x::x(const x &X) \
+    {   logic; \
     } \
-    x &x::operator = (const x &X) { \
-        SET_EQUAL_GUARD(X, startingLogicForAssignment; logic); \
+    x &x::operator = (const x &X) \
+    {   SET_EQUAL_GUARD(X, startingLogicForAssignment; logic); \
     }
 
 #define MOVABLE_TEMPLATE(x, X, startingLogicForAssignment, logic) \
-    x(x &&X) noexcept { \
-        logic; \
+    x(x &&X) noexcept \
+    {   logic; \
     } \
-    x &operator = (x &&X) noexcept { \
-        SET_EQUAL_GUARD(X, startingLogicForAssignment; logic); \
+    x &operator = (x &&X) noexcept \
+    {   SET_EQUAL_GUARD(X, startingLogicForAssignment; logic); \
     }
 
 #define MOVABLE_H(x, X) \
@@ -357,11 +357,11 @@ struct typePointer<pointer<t>> {
     x &operator = (x &&X) noexcept;
 
 #define MOVABLE_CC(x, X, startingLogicForAssignment, logic) \
-    x::x(x &&X) noexcept { \
-        logic; \
+    x::x(x &&X) noexcept \
+    {   logic; \
     } \
-    x &x::operator = (x &&X) noexcept { \
-        SET_EQUAL_GUARD(X, startingLogicForAssignment; logic); \
+    x &x::operator = (x &&X) noexcept \
+    {   SET_EQUAL_GUARD(X, startingLogicForAssignment; logic); \
     }
 
 #define CAST_DEFINE(type, VariableName, FromVariable) \
@@ -372,15 +372,15 @@ struct typePointer<pointer<t>> {
     className &operator op##= (classNameOther Other); 
 
 #define NUMBER_OPERATOR_X_CC(className, op, classNameOther) \
-    className className::operator op (classNameOther Other) const { \
-        className NewValue = This; \
+    className className::operator op (classNameOther Other) const \
+    {   className NewValue = This; \
         NewValue op##= Other; \
         return NewValue; \
     }
 
 #define NUMBER_OPERATOR_X_EQUALS_CC(className, op, classNameOther) \
-    className &className::operator op##= (classNameOther Other) { \
-        this = This op Other; \
+    className &className::operator op##= (classNameOther Other) \
+    {   this = This op Other; \
         return This; \
     }
 
@@ -388,14 +388,14 @@ struct typePointer<pointer<t>> {
 
 #define NUMBER_OPERATOR_X_EQUALS_TEMPLATE_TEMPLATE(className, op, templateOther, classNameOther, logic) \
     templateOther \
-    className &operator op##= (classNameOther Other) & { \
-        logic; \
+    className &operator op##= (classNameOther Other) & \
+    {   logic; \
         return This; \
     } \
     /* TODO: & and && versions on *this */ \
     templateOther \
-    className operator op (classNameOther Other) const { \
-        className ReturnValue = This; \
+    className operator op (classNameOther Other) const \
+    {   className ReturnValue = This; \
         ReturnValue op##= Other; \
         return ReturnValue; \
     }
@@ -405,14 +405,14 @@ struct typePointer<pointer<t>> {
 
 #define OPERATOR_X_FROM_X_EQUALS_TEMPLATE(className, op) \
     template <class other> \
-    className operator op (other Other) const & { \
-        className Result = This; /* copy */ \
+    className operator op (other Other) const & \
+    {   className Result = This; /* copy */ \
         Result op##= Other; \
         return Result; \
     } \
     template <class other> \
-    className operator op (other Other) && { \
-        className Result = std::move(This); \
+    className operator op (other Other) && \
+    {   className Result = std::move(This); \
         Result op##= Other; \
         return Result; \
     }
@@ -422,58 +422,58 @@ struct typePointer<pointer<t>> {
 #define AND ,
 
 template <class t, class u>
-bool checkEqualFloat(const t &A, const u &B) {
-    static_assert(std::is_floating_point<t>::value);
+bool checkEqualFloat(const t &A, const u &B)
+{   static_assert(std::is_floating_point<t>::value);
     t AbsDelta = std::abs(A - B);
     t AbsMin = std::min(std::abs(A), std::abs(t(B)));
-    if (AbsMin < 1e-2) {
-        return AbsDelta < 1e-7;
+    if (AbsMin < 1e-2)
+    {   return AbsDelta < 1e-7;
     }
     return AbsDelta / AbsMin < 1e-5;
 }
 
 template <class t, class u>
-bool checkEqual(const t &A, const u &B) {
-    if constexpr (std::is_floating_point<t>::value || std::is_floating_point<u>::value) {
-        if constexpr (std::is_floating_point<t>::value) {
-            return checkEqualFloat(A, B);
+bool checkEqual(const t &A, const u &B)
+{   if constexpr (std::is_floating_point<t>::value || std::is_floating_point<u>::value)
+    {   if constexpr (std::is_floating_point<t>::value)
+        {   return checkEqualFloat(A, B);
         }
-        else {
-            return checkEqualFloat(B, A);
+        else
+        {   return checkEqualFloat(B, A);
         }
     }
     return A == B;
 }
 
 #ifndef NDEBUG
-namespace test {
-    template <size_t Size>
-    class noisyU8s {
-        // type that prints when constructed/moved/destroyed
+namespace test
+{   template <size_t Size>
+    class noisyU8s
+    {   // type that prints when constructed/moved/destroyed
         static_assert(Size > 0);
         static_assert(Size <= 8);
         u8 Values[Size] = {0};
     public:
-        void value(i64 Value) {
-            u64 UV = Value;
+        void value(i64 Value)
+        {   u64 UV = Value;
             u8 *U8s = Values;
-            for (size_t I = 0; I < Size; ++I) {
-                *(U8s++) = UV & 255;
+            for (size_t I = 0; I < Size; ++I)
+            {   *(U8s++) = UV & 255;
                 UV >>= 8;
             }
         }
 
-        explicit noisyU8s(i64 Value = -1) {
-            value(Value);
+        explicit noisyU8s(i64 Value = -1)
+        {   value(Value);
             std::cout << This;
         }
 
-        i64 value() const {
-            u64 UV = 0;
+        i64 value() const
+        {   u64 UV = 0;
             const u8 *U8s = Values;
             bool Negative = False;
-            for (size_t I = 0; I < Size; ++I) {
-                u8 U8 = *(U8s++);
+            for (size_t I = 0; I < Size; ++I)
+            {   u8 U8 = *(U8s++);
                 if (I == Size - 1 && (U8 & 128))
                 {   U8 &= 127;
                     Negative = True;
@@ -487,14 +487,14 @@ namespace test {
             ;
         }
 
-        noisyU8s(const noisyU8s& N) {
-            copy(N);
+        noisyU8s(const noisyU8s& N)
+        {   copy(N);
             std::cout << "{CC}";
         }
 
-        noisyU8s &operator = (const noisyU8s &N) {
-            if (this == &N) {
-                std::cout << "[oops, copying to self]";
+        noisyU8s &operator = (const noisyU8s &N)
+        {   if (this == &N)
+            {   std::cout << "[oops, copying to self]";
                 return This;
             }
             copy(N);
@@ -502,15 +502,15 @@ namespace test {
             return This;
         }
 
-        noisyU8s(noisyU8s&& N) {
+        noisyU8s(noisyU8s&& N)
         {   copy(N);
             std::cout << "{MC}";
             N.value(-N.value());
         }
 
-        noisyU8s &operator = (noisyU8s &&N) {
-            if (this == &N) {
-                std::cout << "[oops, moving to self]";
+        noisyU8s &operator = (noisyU8s &&N)
+        {   if (this == &N)
+            {   std::cout << "[oops, moving to self]";
                 return This;
             }
             copy(N);
@@ -519,35 +519,35 @@ namespace test {
             return This;
         }
 
-        ~noisyU8s() {
-            std::cout << "~" << This;
+        ~noisyU8s()
+        {   std::cout << "~" << This;
         }
 
-        bool operator == (const noisyU8s &Other) const {
-            for (size_t I = 0; I < Size; ++I) {
-                if (Values[I] != Other.Values[I]) {
-                    return False;
+        bool operator == (const noisyU8s &Other) const
+        {   for (size_t I = 0; I < Size; ++I)
+            {   if (Values[I] != Other.Values[I])
+                {   return False;
                 }
             }
             return True;
         }
 
     private:
-        void copy(const noisyU8s &N) {
-            for (size_t I = 0; I < Size; ++I) {
-                Values[I] = N.Values[I];
+        void copy(const noisyU8s &N)
+        {   for (size_t I = 0; I < Size; ++I)
+            {   Values[I] = N.Values[I];
             }
             std::cout << This;
         }
     };
 
     template <size_t Size>
-    std::ostream &operator << (std::ostream & Out, const noisyU8s<Size> &Noisy) {
-        return Out << "noisy(" << Noisy.value() << ")";
+    std::ostream &operator << (std::ostream & Out, const noisyU8s<Size> &Noisy)
+    {   return Out << "noisy(" << Noisy.value() << ")";
     }
 
-    class noisy {
-        // type that prints when constructed/moved/destroyed
+    class noisy
+    {   // type that prints when constructed/moved/destroyed
         const char *TypeName;
     public:
         i64 Value;
@@ -579,8 +579,8 @@ namespace test {
 
     class child;
 
-    class parent : public noisy {
-        public:
+    class parent : public noisy
+    {   public:
         parent(i64 V = -1);
         parent(const parent &Other); // CC
         parent(parent &&Other); // MC
@@ -595,8 +595,8 @@ namespace test {
         virtual bool equals(const noisy &Other) const override;
     };
 
-    class child : public parent {
-        public:
+    class child : public parent
+    {   public:
         std::string Name;
 
         child(std::string N, i64 V = -10);
@@ -613,8 +613,8 @@ namespace test {
         virtual bool equals(const noisy &Other) const override;
     };
 
-    class aunt : public noisy {
-        // NO INHERITANCE from parent/child
+    class aunt : public noisy
+    {   // NO INHERITANCE from parent/child
     public:
         std::string Name;
 
@@ -631,8 +631,8 @@ namespace test {
 }
 
 template <>
-struct typeData<test::noisy> {
-    static constexpr index WrapperMemoryBytes =
+struct typeData<test::noisy>
+{   static constexpr index WrapperMemoryBytes =
             8   // VTable
         +   8   // const char *TypeName
         +   8   // i64 Value
