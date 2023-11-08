@@ -3,6 +3,7 @@ project(example)
 
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 20)
 
 # Dependencies
 find_package(raylib 4.5.0 QUIET) # QUIET or REQUIRED

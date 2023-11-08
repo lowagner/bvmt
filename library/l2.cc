@@ -9,7 +9,7 @@ l2::l2()
 }
 
 textureBatcher l2::batch()
-{   return Texture->batch();
+{   return (*Texture)->batch();
 }
 
 void l2::writeToRow(const char *Chars)

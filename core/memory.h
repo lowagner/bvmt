@@ -91,5 +91,3 @@ namespace memory
 }
 
 TMVB
-
-#endif

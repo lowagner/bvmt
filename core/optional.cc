@@ -16,7 +16,7 @@ using test::color;
 using test::noisy;
 void test__core__optional()
 {   TEST
-    (   // default construction + reset() can be called on a null state:
+    (   "default construction + reset() can be called on a null state",
         optional<noisy> OptionalNoisy;
         ASSERT(OptionalNoisy == Null);
         EXPECT_THROW(*OptionalNoisy, "optional is Null");
@@ -28,7 +28,7 @@ void test__core__optional()
     );
 
     TEST
-    (   // construction and reset() works with a value
+    (   "construction and reset() works with a value",
         optional<noisy> OptionalNoisy(noisy(3));
         // Takes some moving into place, since we create the noisy in this thread:
         EXPECT_EQUAL(TestPrintOutput.pull(), "noisy(3)noisy(3){MC}~noisy(-3)");
@@ -45,8 +45,9 @@ void test__core__optional()
     );
 
     TEST
-    (   TEST
-        (   // takeValue() works
+    (   "takeValue",
+        TEST
+        (   "takeValue() works if not Null",
             {   optional<noisy> OptionalSource(noisy(3));
                 optional<noisy> OptionalSink;
                 ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction
@@ -66,18 +67,18 @@ void test__core__optional()
         );
 
         TEST
-        (   // takeValue() throws if Null
+        (   "takeValue() throws if Null",
             optional<noisy> Optional;
             EXPECT_THROW(Optional.takeValue(), "optional is Null");
         );
     )
 
     TEST
-    (   // move assignment and move construction work
+    (   "move assignment and move construction work",
         TEST
-        (   // for incoming value
+        (   "for incoming value",
             TEST
-            (   // move construction works
+            (   "move construction works",
                 {   optional<noisy> OptionalSource(noisy(10));
                     ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction
 
@@ -93,7 +94,7 @@ void test__core__optional()
             );
 
             TEST
-            (   // move assignment works from null state
+            (   "move assignment works from null state",
                 {   optional<noisy> OptionalSource(noisy(10));
                     ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction
 
@@ -114,7 +115,7 @@ void test__core__optional()
             );
 
             TEST
-            (   // move assignment works from existing value
+            (   "move assignment works from existing value",
                 {   optional<noisy> OptionalSource(noisy(10));
                     ASSERT_STRING(TestPrintOutput.pull(), contains("noisy")); // ignore construction
 
@@ -136,9 +137,9 @@ void test__core__optional()
         );
 
         TEST
-        (   // for incoming null
+        (   "for incoming null",
             TEST
-            (   // move construction works
+            (   "move construction works",
                 {   optional<noisy> OptionalSource;
 
                     {   optional<noisy> OptionalSink(std::move(OptionalSource));
@@ -153,7 +154,7 @@ void test__core__optional()
             );
 
             TEST
-            (   // move assignment works from null state
+            (   "move assignment works from null state",
                 {   optional<noisy> OptionalSource;
 
                     {   // need to make sure we don't do a move constructor by accident:
@@ -173,7 +174,7 @@ void test__core__optional()
             );
 
             TEST
-            (   // move assignment works from existing value
+            (   "move assignment works from existing value",
                 {   optional<noisy> OptionalSource;
 
                     {   // need to make sure we don't do a move constructor by accident:
@@ -194,9 +195,9 @@ void test__core__optional()
         );
 
         TEST
-        (   // a moved null
+        (   "a moved null",
             TEST
-            (   // moved null can be converted back to a value
+            (   "moved null can be converted back to a value",
                 {   optional<noisy> Moved;
                     ASSERT(Moved == Null);
 
@@ -212,9 +213,9 @@ void test__core__optional()
         );
 
         TEST
-        (   // a moved value
+        (   "a moved value",
             TEST
-            (   // moved value can be converted back to a value
+            (   "moved value can be converted back to a value",
                 {   optional<noisy> Moved(noisy(7));
                     EXPECT_EQUAL(TestPrintOutput.pull(), "noisy(7)noisy(7){MC}~noisy(-7)");
                     ASSERT(Moved != Null);
@@ -234,14 +235,17 @@ void test__core__optional()
     );
 
     TEST
-    (   // construction and reset() works with a pointer
+    (   "construction and reset() works with a pointer",
         TEST
-        (   optional<noisy &> OptionalNoisy;
+        (   "default constructor",
+            optional<noisy &> OptionalNoisy;
             ASSERT(OptionalNoisy == Null)
+            EXPECT_EQUAL(TestPrintOutput.pull(), "");
         );
 
         TEST
-        (   noisy Source(120);
+        (   "reset works on reference type",
+            noisy Source(120);
             EXPECT_EQUAL(TestPrintOutput.pull(), "noisy(120)");
             {   optional<noisy &> OptionalNoisy(Source);
 
@@ -257,16 +261,16 @@ void test__core__optional()
 
     /* TODO:
     TEST
-    (   // construction works for non-reference type
+    (   "construction works for non-reference type",
         TEST
-        (   // empty optional copy constructor
+        (   "empty optional copy constructor",
             optional<noisy> Source;
             optional<noisy> Destination(Source);
             ASSERT(Destination == Null)
         );
 
         TEST
-        (   // non-empty optional copy constructor
+        (   "non-empty optional copy constructor",
             optional<noisy> Source(noisy(100));
             EXPECT_EQUAL(TestPrintOutput.pull(), "noisy(100)");
 
@@ -283,7 +287,7 @@ void test__core__optional()
     */
 
     TEST
-    (   // doesn't take up too much space
+    (   "doesn't take up too much space",
         EXPECT_EQUAL(sizeof(optional<color>), 4 * sizeof(u8));
         optional<color> ColorArray[2];
         EXPECT_EQUAL(size_t((u8 *)(&ColorArray[1]) - (u8 *)(&ColorArray[0])), 4 * sizeof(u8));

@@ -305,9 +305,9 @@ namespace detail
                         BaseKernelSelf
                     );
                     for
-                    (   optional<t> T = Self->ParentKernel->next(Self->ParentKernel.get());
+                    (   optional<t> T = Self->ParentKernel->next(&*Self->ParentKernel);
                         T != Null;
-                        T = Self->ParentKernel->next(Self->ParentKernel.get())
+                        T = Self->ParentKernel->next(&*Self->ParentKernel)
                     )
                     {   optional<u> U = Self->mapTToU(*T);
                         if (U != Null)
@@ -343,11 +343,11 @@ public:
 
     optional<t> next()
     {   ASSERT(Kernel->next != Null);
-        return Kernel->next(Kernel.get());
+        return Kernel->next(&*Kernel);
     }
 
     bool checkAny(fn<bool(const t &)> hasCondition)
-    {   for (const t & Entry : *this)
+    {   for (const t & Entry : This)
         {   if (hasCondition(Entry))
             {   return true;
             }

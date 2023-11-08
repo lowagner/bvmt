@@ -8,9 +8,6 @@
 #include <string>
 #include <string.h>
 #include <sstream>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
 
 BVMT
 
@@ -60,6 +57,19 @@ public:
 #define STRINGIFY(X) #X
 #define TO_STRING(X) STRINGIFY(X)
 #define AT __FILE__ ":" TO_STRING(__LINE__)
+#define TRY(Context, x) \
+{   try { x; } \
+    catch (const bvmt::error &E) { \
+        std::ostringstream StringStream; \
+        StringStream.imbue(std::locale("C")); \
+        StringStream << Context; \
+        std::string StringContext = StringStream.str(); \
+        if (StringContext.size()) { \
+            StringContext += ": "; \
+        } \
+        throw bvmt::error(StringContext + E.Message, E.At + "\n    " AT); \
+    } \
+}
 
 #ifdef NDEBUG
 #define DEBUG_ONLY(x) ((void)0)
@@ -73,7 +83,6 @@ public:
 #define ASSERT_THIS(X, y) ((void)0)
 #define ASSERT_PROBABLY(x) ((void)0)
 #define ASSERT_WORD_ALIGNED(X) ((void)0)
-#define TRY(Context, x) ((void)0)
 #define TEST(Context, x) ((void)0)
 #define TEST_2_TYPES(Context, x, y, actualTest) ((void)0)
 #define TEST_2_VALUES(Context, X, Y, actualTest) ((void)0)
@@ -104,19 +113,6 @@ static bool TestOnly = False;
 #define ASSERT_PROBABLY(X) { if (!(X)) LOG_ERR("expected " #X); }
 #define ASSERT_WORD_ALIGNED(X) \
     ASSERT(((i64)(u8 *)&(X)) % sizeof(u8 *) == 0);
-#define TRY(Context, x) \
-{   try { x; } \
-    catch (const bvmt::error &E) { \
-        std::ostringstream StringStream; \
-        StringStream.imbue(std::locale("C")); \
-        StringStream << Context; \
-        std::string StringContext = StringStream.str(); \
-        if (StringContext.size()) { \
-            StringContext += ": "; \
-        } \
-        throw bvmt::error(StringContext + E.Message, E.At + "\n    " AT); \
-    } \
-}
 #define TEST(Context, x) \
 {   TestOnly = True; \
     bvmt::capturer TestPrintOutput(std::cout); \

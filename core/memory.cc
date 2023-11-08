@@ -12,7 +12,7 @@ using test::noisy;
 using namespace memory;
 void test__core__memory()
 {   TEST
-    (   // allocate + deallocate works with primitive type
+    (   "allocate + deallocate works with primitive type",
         i64 *Ints = allocate<i64>(10L);
         string PrintOutput = TestPrintOutput.pull();
         array<stringView> AllocateIo = PrintOutput.view().split('|');

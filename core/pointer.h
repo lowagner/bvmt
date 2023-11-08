@@ -6,6 +6,9 @@
 BVMT
 
 template <class t>
+class optional;
+
+template <class t>
 class pointer
 {   // A class which has some specific logic to destroy the held pointer or not.
     // if onDestroy is not defined, this acts as a reference class (i.e., the pointer is not freed).

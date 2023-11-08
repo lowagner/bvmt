@@ -494,5 +494,3 @@ namespace std
     {   std::size_t operator() (const bvmt::string& String) const;
     };
 }
-
-#endif

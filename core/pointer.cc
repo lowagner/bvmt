@@ -37,8 +37,7 @@ void test__core__pointer()
                 EXPECT_EQUAL(TestPrintOutput.pull(), "descoped~parent(100)");
                 ASSERT(Pointer == Null);
 
-                // should not throw:
-                TRY(Pointer.reset());
+                TRY("should not throw", Pointer.reset());
             }
             EXPECT_EQUAL(TestPrintOutput.pull(), "");
         );
@@ -122,12 +121,12 @@ void test__core__pointer()
                     EXPECT_EQUAL(TestPrintOutput.pull(), "");
 
                     // Source should keep the pointer:
-                    ASSERT(PointerSource.get() == PointerDestination.get());
+                    ASSERT(&*PointerSource == &*PointerDestination);
                     ASSERT(PointerSource != Null);
 
-                    EXPECT_EQUAL(PointerDestination.get()->Value, 9);
-                    ++(PointerDestination.get()->Value);
-                    EXPECT_EQUAL(PointerSource.get()->Value, 10);
+                    EXPECT_EQUAL(PointerDestination->Value, 9);
+                    ++(PointerDestination->Value);
+                    EXPECT_EQUAL(PointerSource->Value, 10);
                 }
                 EXPECT_EQUAL(TestPrintOutput.pull(), "");
             }
@@ -145,7 +144,7 @@ void test__core__pointer()
                 DestructibleTwice.~pointer();
 
                 EXPECT_EQUAL(TestPrintOutput.pull(), "~parent(1)");
-                ASSERT(DestructibleTwice.get() == Null);
+                ASSERT(DestructibleTwice == Null);
                 EXPECT_THROW(DestructibleTwice->Value, "Cannot access fields of null pointer.");
                 EXPECT_THROW(*DestructibleTwice, "Cannot access fields of null pointer.");
             }
@@ -155,4 +154,4 @@ void test__core__pointer()
 }
 #endif
 
-TVMB
+TMVB

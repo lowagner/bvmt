@@ -4,6 +4,7 @@
 #include <functional> // std::function
 #include <iostream> // std::ostream
 #include <iterator> // default_sentinel_t
+#include <limits> // numeric_limits
 
 #define BVMT namespace bvmt {
 #define TMVB }
@@ -92,8 +93,6 @@ constexpr bool False = false;
 typedef decltype(nullptr) null;
 constexpr null Null = nullptr;
 
-typedef std::default_sentinel_t sentinel;
-
 #define This (*this)
 
 typedef int64_t i64;
@@ -105,11 +104,20 @@ typedef uint32_t u32;
 typedef uint16_t u16;
 typedef uint8_t u8;
 
+typedef float flt;
 typedef float f32;
 typedef double f64;
+typedef double dbl;
+
+typedef int64_t index;
+typedef int64_t count;
+
+typedef int32_t rune;
 
 template <class functionType>
 using fn = std::function<functionType>;
+
+typedef std::default_sentinel_t sentinel;
 
 // returns the hex character ('0' to 'f') for the value passed in (expected to be 0 to 15).
 char nibble(u8 Value);
@@ -265,7 +273,7 @@ template <class t>
 const t typeDefault<t, False>::DefaultInstance = t();
 
 template <class t>
-struct typePointer<pointer<t>>i
+struct typePointer<pointer<t>>
 {   static constexpr bool IsPointerLike = True;
     static constexpr bool IsPointer = True;
     typedef t pointingAt;

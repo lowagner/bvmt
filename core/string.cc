@@ -498,8 +498,8 @@ iterator<stringView> stringView::split(rune Split) const
 void test__core__string()
 {   string::locale("en_US.utf8"); // for utf8 support
 
-    TEST(
-        // Default string is empty:
+    TEST
+    (   "default string is empty",
         string String;
         EXPECT_EQUAL(String, "");
         EXPECT_EQUAL(String.chars(), "");
@@ -508,8 +508,8 @@ void test__core__string()
         EXPECT_EQUAL(String, Empty);
     );
 
-    TEST(
-        // Other strings work as expected:
+    TEST
+    (   "Other strings work as expected",
         string String("asdf");
         EXPECT_EQUAL(String, "asdf");
 
@@ -519,8 +519,8 @@ void test__core__string()
         EXPECT_NOT_EQUAL(String, OtherString);
     );
 
-    TEST(
-        // Using std::string to initialize:
+    TEST
+    (   "Using std::string to initialize",
         std::string CxxString = "hello!";
         string String(CxxString);
         EXPECT_EQUAL(String, "hello!");
@@ -534,15 +534,15 @@ void test__core__string()
         EXPECT_EQUAL(String, "hello!");
     );
 
-    TEST(
-        // Using rune to initialize:
+    TEST
+    (   "Using rune to initialize",
         EXPECT_EQUAL(string(127820), "🍌");
         EXPECT_EQUAL(string(223), "ß");
         EXPECT_EQUAL(string('Z'), "Z");
     );
 
     TEST
-    (   // can construct from a stringView
+    (   "can construct from a stringView",
         string String("Cerberus");
         stringView StringView = String.view();
         EXPECT_EQUAL(StringView, String);
@@ -565,21 +565,21 @@ void test__core__string()
     );
 
     TEST
-    (   // of works correctly
+    (   "of works correctly",
         TEST
-        (   // string::of(int)
+        (   "string::of(int)",
             int Number = 12345;
             EXPECT_EQUAL(string::of(Number), "12345");
         );
 
         TEST
-        (   // string::of(float)
+        (   "string::of(float)",
             float Number = 1234.56;
             EXPECT_EQUAL(string::of(Number), "1234.56");
         );
 
         TEST
-        (   // string::of(string)
+        (   "string::of(string)",
             // TODO: it'd be nice to test that this doesn't over-allocate
             // (just moves the string), but that's hard to do.
             EXPECT_EQUAL(string::of(string("hi, world")), "hi, world");
@@ -587,11 +587,11 @@ void test__core__string()
     );
 
     TEST
-    (   // append works correctly
+    (   "append works correctly",
         TEST
-        (   // append() and += works for rune correctly
+        (   "append() and += works for rune correctly",
             TEST
-            (   // On initially empty String...
+            (   "On initially empty String...",
                 {   string String;
                     EXPECT_EQUAL(String.count(), 0);
                     String.append(223);
@@ -615,7 +615,7 @@ void test__core__string()
             );
 
             TEST
-            (   // On initially non-empty String...
+            (   "On initially non-empty String...",
                 string String("asdf");
                 EXPECT_EQUAL(String.count(), 4);
 
@@ -634,9 +634,9 @@ void test__core__string()
         );
 
         TEST
-        (   // append() and += works for string correctly
+        (   "append() and += works for string correctly",
             TEST
-            (   // On initially empty String...
+            (   "On initially empty String...",
                 {   string String;
                     EXPECT_EQUAL(String.count(), 0);
                     String += string("hello");
@@ -653,7 +653,7 @@ void test__core__string()
             );
 
             TEST
-            (   // On initially non-empty String...
+            (   "On initially non-empty String...",
                 string String("hello");
                 EXPECT_EQUAL(String.count(), 5);
 
@@ -665,9 +665,9 @@ void test__core__string()
     );
 
     TEST
-    (   // * and *= work correctly
+    (   "* and *= work correctly",
         TEST
-        (   // * works correctly
+        (   "* works correctly",
             string Source("hey");
 
             EXPECT_EQUAL(Source * 4.4, "heyheyheyhey");
@@ -684,7 +684,7 @@ void test__core__string()
         );
 
         TEST
-        (   // *= works correctly
+        (   "*= works correctly",
             string Multiply("hello world");
             Multiply *= 5;
             EXPECT_EQUAL(Multiply, "hello worldhello worldhello worldhello worldhello world");
@@ -702,9 +702,9 @@ void test__core__string()
     );
 
     TEST
-    (   // () and [] work correctly
+    (   "() and [] work correctly",
         TEST
-        (   // [] or () with internal string or stringView
+        (   "[] or () with internal string or stringView",
             string External("hey");
             string InternalString("🍌Straße");
             stringView InternalView = InternalString;
@@ -726,7 +726,7 @@ void test__core__string()
         );
 
         TEST
-        (   // [] or () with external string or stringView
+        (   "[] or () with external string or stringView",
             string ExternalString("Straße🍌");
             stringView ExternalView = ExternalString;
             string Internal("world");
@@ -749,9 +749,9 @@ void test__core__string()
     );
 
     TEST
-    (   // pop() works correctly
+    (   "pop() works correctly",
         TEST
-        (   // On initially non-empty String...
+        (   "On initially non-empty String...",
             string String("asdfß🍌a");
             EXPECT_EQUAL(String.count(), 7);
 
@@ -769,7 +769,7 @@ void test__core__string()
         );
 
         TEST
-        (   // On single character String
+        (   "On single character String",
             for (int Shift = 0; Shift <= 20; ++Shift)
             for (int I = 5; I < 30; ++I)
             {   rune Rune = (1 << Shift) + I;
@@ -781,8 +781,8 @@ void test__core__string()
         );
     );
 
-    TEST(
-        // string::count() works as expected
+    TEST
+    (   "string::count() works as expected",
         string String;
         EXPECT_EQUAL(String.count(), 0);
 
@@ -794,7 +794,7 @@ void test__core__string()
     );
 
     TEST
-    (   // Iteration:
+    (   "Iteration",
         array<rune> Runes;
         string String("asdFß水 5𝄋7🍌");
         for (const rune &Rune : String.runes())
@@ -819,9 +819,9 @@ void test__core__string()
     );
 
     TEST
-    (   // sorting/ordering works
+    (   "sorting/ordering works",
         TEST
-        (   // operator < works:
+        (   "operator < works",
             // Examples from https://en.cppreference.com/w/cpp/locale/collate/compare
             string Hrnec("hrnec");
             string Chrt("chrt");
@@ -843,7 +843,7 @@ void test__core__string()
         );
 
         TEST
-        (   // sorting a string array works
+        (   "sorting a string array works",
             array<string> Array({"zoo", "apple", "beak", "Astrology", "eagle", "år", "best", "East"});
             Array.sort();
             EXPECT_EQUAL
@@ -853,7 +853,7 @@ void test__core__string()
         );
 
         TEST
-        (   // sorting with a custom comparator works
+        (   "sorting with a custom comparator works",
             stringAsciiCompare compare;
 
             // "år" should come before "asdf" with utf8 sorting, but not Ascii sorting:
@@ -873,9 +873,9 @@ void test__core__string()
     );
 
     TEST
-    (   // contains() works
+    (   "contains() works",
         TEST
-        (   // contains(const char *Substring)
+        (   "contains(const char *Substring)",
             string String("asdf🍌1234hello567world !");
             EXPECT_EQUAL(String.contains("hello"), True);
             EXPECT_EQUAL(String.contains("rld !"), True);
@@ -886,7 +886,7 @@ void test__core__string()
         );
 
         TEST
-        (   // contains(const string &Substring)
+        (   "contains(const string &Substring)",
             string String("asdf🍌1234hello567world !");
             EXPECT_EQUAL(String.contains(string("hello")), True);
             EXPECT_EQUAL(String.contains(string("rld !")), True);
@@ -898,9 +898,9 @@ void test__core__string()
     );
 
     TEST
-    (   // stringView
+    (   "stringView",
         TEST
-        (   // shift() and empty() work: 
+        (   "shift() and empty() work: ",
             string String("suß🍌");
             stringView StringView = String.view();
             EXPECT_EQUAL(StringView, "suß🍌");
@@ -919,7 +919,7 @@ void test__core__string()
         );
 
         TEST
-        (   // pop() and empty() work: 
+        (   "pop() and empty() work: ",
             string String("suß🍌");
             stringView StringView = String.view();
             EXPECT_EQUAL(StringView, "suß🍌");
@@ -938,7 +938,7 @@ void test__core__string()
         );
 
         TEST
-        (   // first() works: 
+        (   "first() works: ",
             string String("suß🍌");
             stringView StringView = String.view();
             EXPECT_EQUAL(StringView.first(), 's');
@@ -952,7 +952,7 @@ void test__core__string()
         );
 
         TEST
-        (   // last() works: 
+        (   "last() works: ",
             string String("suß🍌");
             stringView StringView = String.view();
             EXPECT_EQUAL(StringView.last(), 127820);
@@ -967,7 +967,7 @@ void test__core__string()
         );
 
         TEST
-        (   // getting a stringView to print
+        (   "getting a stringView to print",
             string String("Cerberus");
             stringView StringView = String.view();
             EXPECT_EQUAL(StringView, String);
@@ -977,7 +977,7 @@ void test__core__string()
         );
 
         TEST
-        (   // changing the underlying string does not change the stringView
+        (   "changing the underlying string does not change the stringView",
             // as long as the string size does not increase.
             string String("can");
             stringView StringView = String.view();
@@ -1004,7 +1004,7 @@ void test__core__string()
         );
 
         TEST
-        (   // increasing the size of the underlying string does indirectly affect stringView
+        (   "increasing the size of the underlying string does indirectly affect stringView",
             string String("tank");
             stringView StringView = String.view();
             EXPECT_EQUAL(StringView, String);
@@ -1021,11 +1021,11 @@ void test__core__string()
         );
 
         TEST
-        (   // stripping whitespace works ok
+        (   "stripping whitespace works ok",
             TEST
-            (   // no whitespace that it should consume
+            (   "no whitespace that it should consume",
                 TEST
-                (   // strip works ok if already no whitespace
+                (   "strip works ok if already no whitespace",
 
                     // temporary stringView:
                     string String("asdf");
@@ -1041,7 +1041,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // stripFront works ok if already no whitespace
+                (   "stripFront works ok if already no whitespace",
 
                     // temporary stringView:
                     string String("asdf  ");
@@ -1057,7 +1057,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // stripBack works ok if already no whitespace
+                (   "stripBack works ok if already no whitespace",
 
                     // temporary stringView:
                     string String("  asdf");
@@ -1074,9 +1074,9 @@ void test__core__string()
             );
 
             TEST
-            (   // should consume whitespace
+            (   "should consume whitespace",
                 TEST
-                (   // strip works ok 
+                (   "strip works ok ",
 
                     // temporary stringView:
                     string String("  as  df     ");
@@ -1093,7 +1093,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // stripFront works ok
+                (   "stripFront works ok",
 
                     // temporary stringView:
                     string String("        asd f ");
@@ -1110,7 +1110,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // stripBack works ok
+                (   "stripBack works ok",
 
                     // temporary stringView:
                     string String("   a sdf       ");
@@ -1128,7 +1128,7 @@ void test__core__string()
             );
 
             TEST
-            (   // should consume whitespace with non-ascii around
+            (   "should consume whitespace with non-ascii around",
                 // temporary stringView:
                 string String("      🍌 as dfß     ");
                 stringView View = String.view().strip();
@@ -1145,10 +1145,10 @@ void test__core__string()
         );
 
         TEST
-        (   // split
+        (   "split",
             TEST
-            (   // string starting and ending with the delimiter
-                string String(":a:b:cd:e:");
+            (   "string starting and ending with the delimiter",
+                string String(":a:b:cd:e");
                 iterator<stringView> SplitIterator = String.view().split(':');
                 EXPECT_EQUAL(*SplitIterator.next(), "");
                 EXPECT_EQUAL(*SplitIterator.next(), "a");
@@ -1160,35 +1160,35 @@ void test__core__string()
             );
 
             TEST
-            (   // ok for empty string
+            (   "ok for empty string",
                 string String("");
                 array<stringView> SplitArray = String.view().split('q');
                 EXPECT_EQUAL(SplitArray, array<const char *>({""}));
             );
 
             TEST
-            (   // ok for no delimiters
+            (   "ok for no delimiters",
                 string String("🍌asdfßhjkl");
                 array<stringView> SplitArray = String.view().split(27700);
                 EXPECT_EQUAL(SplitArray, array<const char *>({"🍌asdfßhjkl"}));
             );
 
             TEST
-            (   // ok for just delimiters
+            (   "ok for just delimiters",
                 string String("水水水");
                 array<stringView> SplitArray = String.view().split(27700);
                 EXPECT_EQUAL(SplitArray, array<const char *>({"", "", "", ""}));
             );
 
             TEST
-            (   // string not starting or ending with the delimiter
+            (   "string not starting or ending with the delimiter",
                 string String("a bcde f gh");
                 array<stringView> SplitArray = String.view().split(' ');
                 EXPECT_EQUAL(SplitArray, array<const char *>({"a", "bcde", "f", "gh"}));
             );
 
             TEST
-            (   // multiple delimiters in a row, also non-ascii delimiter:
+            (   "multiple delimiters in a row, also non-ascii delimiter",
                 string String("🍌🍌abc🍌🍌d🍌e🍌🍌🍌");
                 array<stringView> SplitArray = String.view().split(127820);
                 EXPECT_EQUAL
@@ -1198,7 +1198,7 @@ void test__core__string()
             );
 
             TEST
-            (   // delimiter is 0
+            (   "delimiter is 0",
                 string String; // can't build this up based on `const char *` array
                                // since c++ string will only copy up to first zero byte.
                 String.append(0);
@@ -1215,14 +1215,14 @@ void test__core__string()
         );
 
         TEST
-        (   // integer manipulation methods
+        (   "integer manipulation methods",
             TEST
-            (   // stringView::shiftInteger() works as advertized
+            (   "stringView::shiftInteger() works as advertized",
                 TEST
-                (   // returns false if no numeric values start the string,
+                (   "returns false if no numeric values start the string,",
                     // without changing the passed in number.
                     TEST
-                    (   // spaces don't count as numeric:
+                    (   "spaces don't count as numeric",
                         string String = " 123";
                         stringView StringView = String.view();
                         int Number = -1234;
@@ -1234,7 +1234,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // other ASCII doesn't count 
+                    (   "other ASCII doesn't count ",
                         string String = "a123";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1246,7 +1246,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // utf8 runes don't count
+                    (   "utf8 runes don't count",
                         string String = "水123";
                         stringView StringView = String.view();
                         u16 Number = 256;
@@ -1259,10 +1259,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns false if no numeric values start the string, but prefix was + or -,
+                (   "returns false if no numeric values start the string, but prefix was + or -,",
                     // without changing the passed in number.
                     TEST
-                    (   // spaces don't count as numeric:
+                    (   "spaces don't count as numeric",
                         string String = "- 123";
                         stringView StringView = String.view();
                         int Number = -1234;
@@ -1274,7 +1274,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // other ASCII doesn't count 
+                    (   "other ASCII doesn't count ",
                         string String = "+a123";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1286,7 +1286,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // utf8 runes don't count
+                    (   "utf8 runes don't count",
                         string String = "-水123";
                         stringView StringView = String.view();
                         u16 Number = 256;
@@ -1299,10 +1299,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value started the string,
+                (   "returns true if a numeric value started the string,",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "12345";
                         stringView StringView = String.view();
                         int Number = 0;
@@ -1315,7 +1315,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // ends with ASCII
+                    (   "ends with ASCII",
                         string String = "123 a";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1327,7 +1327,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // ends with utf8 runes
+                    (   "ends with utf8 runes",
                         string String = "56789水";
                         stringView StringView = String.view();
                         u16 Number = 256;
@@ -1339,7 +1339,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // string is completely a binary number:
+                    (   "string is completely a binary number",
                         string String = "0b101001";
                         stringView StringView = String.view();
                         int Number = 0;
@@ -1352,7 +1352,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // string starts with a binary number:
+                    (   "string starts with a binary number",
                         string String = "0b1102";
                         stringView StringView = String.view();
                         int Number = 0;
@@ -1366,10 +1366,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value started the string with a - prefix
+                (   "returns true if a numeric value started the string with a - prefix",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "-12345";
                         stringView StringView = String.view();
                         int Number = 0;
@@ -1382,7 +1382,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // ends with ASCII
+                    (   "ends with ASCII",
                         string String = "-123 a";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1394,7 +1394,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // ends with utf8 runes
+                    (   "ends with utf8 runes",
                         string String = "-56789水";
                         stringView StringView = String.view();
                         i32 Number = 256;
@@ -1407,10 +1407,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value started the string with a + prefix
+                (   "returns true if a numeric value started the string with a + prefix",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "+12345";
                         stringView StringView = String.view();
                         int Number = 0;
@@ -1423,7 +1423,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // ends with ASCII
+                    (   "ends with ASCII",
                         string String = "+123 a";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1435,7 +1435,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // ends with utf8 runes
+                    (   "ends with utf8 runes",
                         string String = "+56789水";
                         stringView StringView = String.view();
                         i32 Number = 256;
@@ -1449,12 +1449,12 @@ void test__core__string()
             );
 
             TEST
-            (   // stringView::integer() for non-const stringView works as advertized
+            (   "stringView::integer() for non-const stringView works as advertized",
                 TEST
-                (   // returns false if no numeric values start the string,
+                (   "returns false if no numeric values start the string,",
                     // without changing the passed in number.
                     TEST
-                    (   // spaces don't count as numeric:
+                    (   "spaces don't count as numeric",
                         string String = " 123";
                         stringView StringView = String.view();
                         int Number = -1234;
@@ -1466,7 +1466,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // other ASCII doesn't count 
+                    (   "other ASCII doesn't count ",
                         string String = "a123";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1478,7 +1478,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // utf8 runes don't count
+                    (   "utf8 runes don't count",
                         string String = "水123";
                         stringView StringView = String.view();
                         u16 Number = 256;
@@ -1491,10 +1491,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns false if no numeric values start the string, but prefix was + or -,
+                (   "returns false if no numeric values start the string, but prefix was + or -,",
                     // without changing the passed in number.
                     TEST
-                    (   // spaces don't count as numeric:
+                    (   "spaces don't count as numeric",
                         string String = "- 123";
                         stringView StringView = String.view();
                         int Number = -1234;
@@ -1506,7 +1506,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // other ASCII doesn't count 
+                    (   "other ASCII doesn't count ",
                         string String = "+a123";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1518,7 +1518,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // utf8 runes don't count
+                    (   "utf8 runes don't count",
                         string String = "-水123";
                         stringView StringView = String.view();
                         u16 Number = 256;
@@ -1531,10 +1531,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value was the full string
+                (   "returns true if a numeric value was the full string",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "1234567890";
                         stringView StringView = String.view();
                         i64 Number = 0;
@@ -1547,7 +1547,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // string started numeric but ended with ASCII
+                    (   "string started numeric but ended with ASCII",
                         string String = "123 a";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1559,7 +1559,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // string started numeric but ended with utf8 runes
+                    (   "string started numeric but ended with utf8 runes",
                         string String = "56789水";
                         stringView StringView = String.view();
                         u16 Number = 256;
@@ -1572,10 +1572,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value started the string with a - prefix
+                (   "returns true if a numeric value started the string with a - prefix",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "-12345";
                         stringView StringView = String.view();
                         int Number = 0;
@@ -1588,7 +1588,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // but NOT if it ends with ASCII
+                    (   "but NOT if it ends with ASCII",
                         string String = "-123 a";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1600,7 +1600,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // but NOT if it ends with utf8 runes
+                    (   "but NOT if it ends with utf8 runes",
                         string String = "-56789水";
                         stringView StringView = String.view();
                         i32 Number = 256;
@@ -1613,10 +1613,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value started the string with a + prefix
+                (   "returns true if a numeric value started the string with a + prefix",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "+12345";
                         stringView StringView = String.view();
                         int Number = 0;
@@ -1629,7 +1629,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // but NOT if it ends with ASCII
+                    (   "but NOT if it ends with ASCII",
                         string String = "+123 a";
                         stringView StringView = String.view();
                         i8 Number = -5;
@@ -1641,7 +1641,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // but NOT if it ends with utf8 runes
+                    (   "but NOT if it ends with utf8 runes",
                         string String = "+56789水";
                         stringView StringView = String.view();
                         i32 Number = 256;
@@ -1655,12 +1655,12 @@ void test__core__string()
             );
 
             TEST
-            (   // stringView::integer() for const stringView works as advertized
+            (   "stringView::integer() for const stringView works as advertized",
                 TEST
-                (   // returns false if no numeric values start the string,
+                (   "returns false if no numeric values start the string,",
                     // without changing the passed in number.
                     TEST
-                    (   // spaces don't count as numeric:
+                    (   "spaces don't count as numeric",
                         string String = " 123";
                         const stringView StringView = String.view();
                         int Number = -1234;
@@ -1672,7 +1672,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // other ASCII doesn't count 
+                    (   "other ASCII doesn't count ",
                         string String = "a123";
                         const stringView StringView = String.view();
                         i8 Number = -5;
@@ -1684,7 +1684,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // utf8 runes don't count
+                    (   "utf8 runes don't count",
                         string String = "水123";
                         const stringView StringView = String.view();
                         u16 Number = 256;
@@ -1697,10 +1697,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns false if no numeric values start the string, but prefix was + or -,
+                (   "returns false if no numeric values start the string, but prefix was + or -,",
                     // without changing the passed in number.
                     TEST
-                    (   // spaces don't count as numeric:
+                    (   "spaces don't count as numeric",
                         string String = "- 123";
                         const stringView StringView = String.view();
                         int Number = -1234;
@@ -1712,7 +1712,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // other ASCII doesn't count 
+                    (   "other ASCII doesn't count ",
                         string String = "+a123";
                         const stringView StringView = String.view();
                         i8 Number = -5;
@@ -1724,7 +1724,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // utf8 runes don't count
+                    (   "utf8 runes don't count",
                         string String = "-水123";
                         const stringView StringView = String.view();
                         u16 Number = 256;
@@ -1737,10 +1737,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value was the full string
+                (   "returns true if a numeric value was the full string",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "1234567890";
                         const stringView StringView = String.view();
                         i64 Number = 0;
@@ -1753,7 +1753,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // string started numeric but ended with ASCII
+                    (   "string started numeric but ended with ASCII",
                         string String = "123 a";
                         const stringView StringView = String.view();
                         i8 Number = -5;
@@ -1765,7 +1765,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // string started numeric but ended with utf8 runes
+                    (   "string started numeric but ended with utf8 runes",
                         string String = "56789水";
                         const stringView StringView = String.view();
                         u16 Number = 256;
@@ -1778,10 +1778,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value started the string with a - prefix
+                (   "returns true if a numeric value started the string with a - prefix",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "-12345";
                         const stringView StringView = String.view();
                         int Number = 0;
@@ -1794,7 +1794,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // but NOT if it ends with ASCII
+                    (   "but NOT if it ends with ASCII",
                         string String = "-123 a";
                         const stringView StringView = String.view();
                         i8 Number = -5;
@@ -1806,7 +1806,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // but NOT if it ends with utf8 runes
+                    (   "but NOT if it ends with utf8 runes",
                         string String = "-56789水";
                         const stringView StringView = String.view();
                         i32 Number = 256;
@@ -1819,10 +1819,10 @@ void test__core__string()
                 );
 
                 TEST
-                (   // returns true if a numeric value started the string with a + prefix
+                (   "returns true if a numeric value started the string with a + prefix",
                     // changing the passed-in number.
                     TEST
-                    (   // string is a number completely:
+                    (   "string is a number completely",
                         string String = "+12345";
                         const stringView StringView = String.view();
                         int Number = 0;
@@ -1835,7 +1835,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // but NOT if it ends with ASCII
+                    (   "but NOT if it ends with ASCII",
                         string String = "+123 a";
                         const stringView StringView = String.view();
                         i8 Number = -5;
@@ -1847,7 +1847,7 @@ void test__core__string()
                     );
 
                     TEST
-                    (   // but NOT if it ends with utf8 runes
+                    (   "but NOT if it ends with utf8 runes",
                         string String = "+56789水";
                         const stringView StringView = String.view();
                         i32 Number = 256;
@@ -1862,11 +1862,11 @@ void test__core__string()
         );
 
         TEST
-        (   // "real" number manipulation methods
+        (   "\"real\" number manipulation methods",
             TEST
-            (   // stringView::shiftReal() works as advertized
+            (   "stringView::shiftReal() works as advertized",
                 TEST
-                (   // works for positive integer followed by decimals, nothing else
+                (   "works for positive integer followed by decimals, nothing else",
                     string String = "+1234.5";
                     stringView StringView = String.view();
                     double Double = -4;
@@ -1881,7 +1881,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for positive integer followed by trailing period
+                (   "works for positive integer followed by trailing period",
                     string String = "+128.";
                     stringView StringView = String.view();
                     double Double = -4;
@@ -1896,7 +1896,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for positive integer followed by decimals, plus non-numeric
+                (   "works for positive integer followed by decimals, plus non-numeric",
                     string String = "+123.45.";
                     stringView StringView = String.view();
                     float Float = -4;
@@ -1911,7 +1911,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for negative integer followed by decimals, nothing else
+                (   "works for negative integer followed by decimals, nothing else",
                     string String = "-1234.5";
                     stringView StringView = String.view();
                     double Double = -4;
@@ -1926,7 +1926,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for negative integer followed by trailing period
+                (   "works for negative integer followed by trailing period",
                     string String = "-128.";
                     stringView StringView = String.view();
                     double Double = -4;
@@ -1941,7 +1941,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for negative integer followed by decimals, plus non-numeric
+                (   "works for negative integer followed by decimals, plus non-numeric",
                     string String = "-123.45.";
                     stringView StringView = String.view();
                     float Float = -4;
@@ -1957,7 +1957,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // ensures things are negative for -0.1234 like strings
+                (   "ensures things are negative for -0.1234 like strings",
                     string String = "-0.1234asdf";
                     stringView StringView = String.view();
                     float Float = -204;
@@ -1972,7 +1972,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // ensures things are positive for +0.431 like strings
+                (   "ensures things are positive for +0.431 like strings",
                     string String = "+0.431 543";
                     stringView StringView = String.view();
                     float Float = -10;
@@ -1986,7 +1986,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // resets stringView if a + or - is found but no subsequent digit
+                (   "resets stringView if a + or - is found but no subsequent digit",
                     string String = "+A";
                     stringView StringView = String.view();
                     float Float = -10;
@@ -2009,7 +2009,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // resets stringView if a . is found before any digit
+                (   "resets stringView if a . is found before any digit",
                     string String = ". bork";
                     stringView StringView = String.view();
                     double Double = -123.4;
@@ -2023,9 +2023,9 @@ void test__core__string()
             );
 
             TEST
-            (   // stringView::real() & works as advertized
+            (   "stringView::real() & works as advertized",
                 TEST
-                (   // works for positive integer followed by decimals, nothing else
+                (   "works for positive integer followed by decimals, nothing else",
                     string String = "+1234.5";
                     stringView StringView = String.view();
                     double Double = -4;
@@ -2040,7 +2040,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for positive integer followed by decimals, plus non-numeric
+                (   "works for positive integer followed by decimals, plus non-numeric",
                     string String = "+123.45.";
                     stringView StringView = String.view();
                     float Float = -4;
@@ -2054,7 +2054,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for negative integer followed by decimals, nothing else
+                (   "works for negative integer followed by decimals, nothing else",
                     string String = "-1234.5";
                     stringView StringView = String.view();
                     double Double = -4;
@@ -2069,7 +2069,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for negative integer followed by decimals, plus non-numeric
+                (   "works for negative integer followed by decimals, plus non-numeric",
                     string String = "-123.45.";
                     stringView StringView = String.view();
                     float Float = -4;
@@ -2084,7 +2084,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // ensures things are negative for -0.1234 like strings
+                (   "ensures things are negative for -0.1234 like strings",
                     string String = "-0.1234";
                     stringView StringView = String.view();
                     float Float = -204;
@@ -2099,7 +2099,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // ensures things are positive for +0.431 like strings
+                (   "ensures things are positive for +0.431 like strings",
                     string String = "+0.431";
                     stringView StringView = String.view();
                     float Float = -10;
@@ -2113,7 +2113,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // resets stringView if a + or - is found but no subsequent digit
+                (   "resets stringView if a + or - is found but no subsequent digit",
                     string String = "+A";
                     stringView StringView = String.view();
                     float Float = -10;
@@ -2136,7 +2136,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // resets stringView if a . is found before any digit
+                (   "resets stringView if a . is found before any digit",
                     string String = ".5";
                     stringView StringView = String.view();
                     double Double = -123.4;
@@ -2150,9 +2150,9 @@ void test__core__string()
             );
 
             TEST
-            (   // stringView::real() const & works as advertized
+            (   "stringView::real() const & works as advertized",
                 TEST
-                (   // works for positive integer followed by decimals, nothing else
+                (   "works for positive integer followed by decimals, nothing else",
                     string String = "+1234.5";
                     const stringView StringView = String.view();
                     double Double = -4;
@@ -2167,7 +2167,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for positive integer followed by decimals, plus non-numeric
+                (   "works for positive integer followed by decimals, plus non-numeric",
                     string String = "+123.45.";
                     const stringView StringView = String.view();
                     float Float = -4;
@@ -2181,7 +2181,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for negative integer followed by decimals, nothing else
+                (   "works for negative integer followed by decimals, nothing else",
                     string String = "-1234.5";
                     const stringView StringView = String.view();
                     double Double = -4;
@@ -2196,7 +2196,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for negative integer followed by decimals, plus non-numeric
+                (   "works for negative integer followed by decimals, plus non-numeric",
                     string String = "-123.45.";
                     const stringView StringView = String.view();
                     float Float = -4;
@@ -2211,7 +2211,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // ensures things are negative for -0.1234 like strings
+                (   "ensures things are negative for -0.1234 like strings",
                     string String = "-0.1234";
                     const stringView StringView = String.view();
                     float Float = -204;
@@ -2226,7 +2226,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // ensures things are positive for +0.431 like strings
+                (   "ensures things are positive for +0.431 like strings",
                     string String = "+0.431";
                     const stringView StringView = String.view();
                     float Float = -10;
@@ -2240,7 +2240,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // resets stringView if a + or - is found but no subsequent digit
+                (   "resets stringView if a + or - is found but no subsequent digit",
                     string String = "+A";
                     stringView StringView = String.view();
                     float Float = -10;
@@ -2263,7 +2263,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // resets stringView if a . is found before any digit
+                (   "resets stringView if a . is found before any digit",
                     string String = ".5";
                     stringView StringView = String.view();
                     double Double = -123.4;
@@ -2276,7 +2276,7 @@ void test__core__string()
                 );
 
                 TEST
-                (   // works for edge cases like +0.5, 0.5, -0.5, 1., 2.0
+                (   "works for edge cases like +0.5, 0.5, -0.5, 1., 2.0",
                     float Float = -10;
 
                     EXPECT_EQUAL(string("+0.5").view().real(determining(Float)), True);
@@ -2306,10 +2306,10 @@ void test__core__string()
     // TODO: string + string doesn't affect other string
     
     /* TODO
-    TEST(
-        // Cropping when text will be cropped
-        TEST(
-            // ASCII only with overflow
+    TEST
+    (   "Cropping when text will be cropped",
+        TEST
+        (   "ASCII only with overflow",
             String string("hey there peeps!");
             Array<String> split;
             for (String line : string.splitOnWidth(3)) {
@@ -2325,8 +2325,8 @@ void test__core__string()
             }));
         );
 
-        TEST(
-            // ASCII only with exact word boundary
+        TEST
+        (   "ASCII only with exact word boundary",
             String string("Good Day");
             Array<String> split;
             for (String line : string.splitOnWidth(4)) {
@@ -2338,8 +2338,8 @@ void test__core__string()
             }));
         );
 
-        TEST(
-            // Splitting non-ASCII character ok:
+        TEST
+        (   "Splitting non-ASCII character ok",
             String string = "水1水23水";
             Array<String> split;
             for (String line : string.splitOnWidth(2)) {
@@ -2354,8 +2354,8 @@ void test__core__string()
             }));
         );
 
-        TEST(
-            // non-ASCII with overflow
+        TEST
+        (   "non-ASCII with overflow",
             String string = "rsß水a🍌";
             Array<String> split;
             for (String line : string.splitOnWidth(4)) {
@@ -2368,8 +2368,8 @@ void test__core__string()
             }));
         );
 
-        TEST(
-            // ASCII and non-ASCII with exact word boundary
+        TEST
+        (   "ASCII and non-ASCII with exact word boundary",
             String string = "asß水5123";
             Array<String> split;
             for (String line : string.splitOnWidth(3)) {
@@ -2382,8 +2382,8 @@ void test__core__string()
             }));
         );
 
-        TEST(
-            // Splitting when a character is too big for the line:
+        TEST
+        (   "Splitting when a character is too big for the line",
             String string = "水1234";
             Array<String> split;
             for (String line : string.splitOnWidth(1)) {
@@ -2393,10 +2393,10 @@ void test__core__string()
         );
     );
 
-    TEST(
-        // Cropping when text will not be cropped
-        TEST(
-            // ASCII
+    TEST
+    (   "Cropping when text will not be cropped",
+        TEST
+        (   "ASCII",
             for (Int i = 8; i < 12; ++i) {
                 String string("hey THIS");
                 Array<String> split;
@@ -2407,8 +2407,8 @@ void test__core__string()
             }
         );
 
-        TEST(
-            // Mix of ASCII with non-ASCII:
+        TEST
+        (   "Mix of ASCII with non-ASCII",
             for (Int i = 7; i < 15; ++i) {
                 String string = "水1234ß";
                 Array<String> split;
