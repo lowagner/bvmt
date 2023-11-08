@@ -14,7 +14,7 @@ namespace test
 };
 using test::color;
 using test::noisy;
-void test_core__optional()
+void test__core__optional()
 {   TEST
     (   // default construction + reset() can be called on a null state:
         optional<noisy> OptionalNoisy;
