@@ -42,8 +42,8 @@ namespace test {
     }
 
     parent &parent::operator = (parent &&Other) {
-        SET_EQUAL_GUARD
-        (   Other,
+        SET_EQUAL_GUARD(
+            Other,
             Value = Other.Value;
             Other.Value *= -1;
             print();
@@ -52,8 +52,8 @@ namespace test {
     }
 
     parent &parent::operator = (const parent &Other) {
-        SET_EQUAL_GUARD
-        (   Other,
+        SET_EQUAL_GUARD(
+            Other,
             Value = Other.Value;
             std::cout << "{CA}";
         );

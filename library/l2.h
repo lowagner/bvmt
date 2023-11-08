@@ -13,16 +13,20 @@ typedef coordinates2<i32> l2Position;
 struct l2 {
     const font *Font = Null;
     l2Position Position;
-    // TODO: `color Color;`
+    // TODO: `rgba Foreground;`
+    // TODO: `rgba Background;`
 
     l2();
 
     // Creates a batch operation for writing to the underlying texture
     // multiple times.  If you are doing many operations, prefer calling
-    // this first.  This is safe to call multiple times, even nested.
+    // this first.  This is safe to call multiple times, even nested,
+    // but probably not from separate threads.  Note that all `l2`s
+    // spawned from `window::l2()` share a common texture to write to.
     textureBatcher batch();
     void writeToRow(const char *Chars);
 private:
+    // TODO: l2Position Min, Max
     // This is a pointer-pointer because the window can change the texture
     // when changing resolution, and we want to grab the updated version.
     windowTexture **Texture;
