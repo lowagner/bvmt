@@ -3,6 +3,7 @@
 #include <cstdint> // int64_t, etc.
 #include <functional> // std::function
 #include <iostream> // std::ostream
+#include <iterator> // default_sentinel_t
 
 #define BVMT namespace bvmt {
 #define TMVB }
@@ -90,6 +91,9 @@ constexpr bool True = true;
 constexpr bool False = false;
 typedef decltype(nullptr) null;
 constexpr null Null = nullptr;
+
+typedef std::default_sentinel_t sentinel;
+
 #define This (*this)
 
 typedef int64_t i64;
