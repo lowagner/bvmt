@@ -26,7 +26,20 @@ font::~font()
 }
 
 void font::size(fontSize New_Size)
-{   // TODO: figure out Multiplier & Spacing for desired pixel width/height
+{   // We'll figure out Scaling & Spacing for the desired pixel width/height.
+    // TODO: Use New_Size.Height as the line height, but
+    //      try to add 2/1 pixels to top/bottom if possible.
+    Font RaylibFont = unwrap(This);
+    /*
+    // Get width from `W`
+    int WIndex = GetGlyphIndex(RaylibFont, 'W');
+    GlyphInfo *WGlyph = RaylibFont.Glyphs + WIndex;
+    // Scaling * (Glyph.AdvanceX || Rectangle.Width) + Spacing
+    int Width = WGlyph->advanceX ? WGlyph->advanceX : RaylibFont.recs[WIndex].width;
+    // Get height from `q`
+    GlyphInfo *QGlyph = RaylibFont.Glyphs + GetGlyphIndex(RaylibFont, 'q');
+    int Height = QGlyph.height
+    */
     Size = New_Size;
 }
 

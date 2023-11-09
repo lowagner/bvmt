@@ -18,9 +18,13 @@ struct font
     void size(fontSize New_Size);
     fontSize size() const;
 
+    // TODO: add a `drawText` method with arbitrary pixel coordinates/offsets.
+    //      inside L2, we'll specify the pixel offsets based on line height,
+    //      but here it can be whatever.
+
     WRAPPER_DATA(48)
 private:
-    float Multiplier = 1.0;
+    float Scaling = 1.0;
     float Spacing = 0.0;
     fontSize Size;
 };

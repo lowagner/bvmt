@@ -14,6 +14,8 @@ class windowTexture;
 typedef size2<i32> windowResolution;
 typedef pushPop<windowTexture> textureBatcher;
 
+// TODO: move outside of `window` into its own file (`texture.h`).
+//      this will be useful enough on its own.
 struct windowTexture
 {   // A texture that the window can draw.
     windowTexture(windowResolution Resolution);
