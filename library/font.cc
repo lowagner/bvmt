@@ -1,5 +1,9 @@
 #include "font.h"
 
+#ifndef NDEBUG
+#include "../core/error.h"
+#endif
+
 #include "raylib.h"
 
 BVMT
@@ -29,5 +33,15 @@ void font::size(fontSize New_Size)
 fontSize font::size() const
 {   return Size;
 }
+
+#ifndef NDEBUG
+void test__library__font()
+{   TEST
+    (   "test stuff",
+        // TODO
+        {}
+    );
+}
+#endif
 
 TMVB

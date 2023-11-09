@@ -701,7 +701,7 @@ private:
     {   ARRAY_ADJUST_INDEX_IF_NEGATIVE(Index)
         else if (Index >= count())
         {   // This will throw if the array is fixed size:
-            TRY("need to increase size of array", count(Index + 1));
+            TRY("", count(Index + 1));
         }
         ASSERT(Index >= 0 && Index < count());
         return &Internal[Index];

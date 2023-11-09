@@ -1148,7 +1148,7 @@ void test__core__string()
         (   "split",
             TEST
             (   "string starting and ending with the delimiter",
-                string String(":a:b:cd:e");
+                string String(":a:b:cd:e:");
                 iterator<stringView> SplitIterator = String.view().split(':');
                 EXPECT_EQUAL(*SplitIterator.next(), "");
                 EXPECT_EQUAL(*SplitIterator.next(), "a");

@@ -28,7 +28,7 @@ BVMT
         for (type TypeVar : Iterator) \
         {   loopLogic; \
         } \
-        return *this; \
+        return This; \
     }
 
 #define ITERATOR_ASSIGNMENT_TEMPLATES(x, logicBeforeAssignment, type, TypeVar, loopLogic) \
@@ -42,7 +42,7 @@ BVMT
         for (type TypeVar : Iterator) \
         {   loopLogic; \
         } \
-        return *this; \
+        return This; \
     }
 
 #define ITERATOR_PLUS_EQUAL_TEMPLATES(x, preLogic, type, TypeVar, loopLogic) \

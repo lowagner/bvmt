@@ -1,5 +1,9 @@
 #include "l2.h"
 
+#ifndef NDEBUG
+#include "../core/error.h"
+#endif
+
 #include "raylib.h"
 
 BVMT
@@ -18,4 +22,13 @@ void l2::writeToRow(const char *Chars)
     // TODO:
 }
 
+#ifndef NDEBUG
+void test__library__l2()
+{   TEST
+    (   "test stuff",
+        // TODO
+        {}
+    );
+}
+#endif
 TMVB

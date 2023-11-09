@@ -1,3 +1,4 @@
 *.swp
 *.blend1
 */build/
+*/test.h

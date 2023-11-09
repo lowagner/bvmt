@@ -1,5 +1,9 @@
 #include "window.h"
 
+#ifndef NDEBUG
+#include "../core/error.h"
+#endif
+
 #include "raylib.h"
 
 #include <algorithm> // std::fill
@@ -59,5 +63,15 @@ bool window::resolution(windowResolution New_Resolution)
 windowResolution window::resolution() const
 {   return Resolution;
 }
+
+#ifndef NDEBUG
+void test__library__window()
+{   TEST
+    (   "test stuff",
+        // TODO
+        {}
+    );
+}
+#endif
 
 TMVB

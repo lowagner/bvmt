@@ -22,9 +22,36 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
   endif()
 endif()
 
-file(GLOB SOURCES *.cc *.h ../library/*.cc ../library/*.h ../core/*.cc ../core/*.h)
+set(
+NEEDED_LIBRARIES
+    dimensions
+    font
+    l2
+    push-pop
+    window
+)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+foreach(Lib IN ITEMS ${NEEDED_LIBRARIES})
+    set(LibH "../library/${Lib}.h")
+    set(LibCc "../library/${Lib}.cc")
+    list(APPEND NEEDED_LIBRARIES_H ${LibH})
+    list(APPEND NEEDED_LIBRARIES_CC ${LibCc}) 
+endforeach()
+
+file(GLOB SOURCES_H *.h ${NEEDED_LIBRARIES_H} ../core/*.h)
+file(GLOB SOURCES *.cc ${NEEDED_LIBRARIES_CC} ../core/*.cc ${SOURCES_H})
+
+set(CombineAllTestsPy "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/combine_all_tests.py")
+set(TestH "${CMAKE_CURRENT_SOURCE_DIR}/test.h")
+add_custom_command(
+    COMMAND ../scripts/combine_all_tests.py ${SOURCES_H}
+    DEPENDS ${CombineAllTestsPy} ${SOURCES}
+    OUTPUT ${TestH}
+    COMMENT "Generating code for test.h"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${TestH})
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)
 target_link_libraries(${PROJECT_NAME} m)

@@ -59,13 +59,13 @@ public:
 #define AT __FILE__ ":" TO_STRING(__LINE__)
 #define TRY(Context, x) \
 {   try { x; } \
-    catch (const bvmt::error &E) { \
-        std::ostringstream StringStream; \
+    catch (const bvmt::error &E) \
+    {   std::ostringstream StringStream; \
         StringStream.imbue(std::locale("C")); \
         StringStream << Context; \
         std::string StringContext = StringStream.str(); \
-        if (StringContext.size()) { \
-            StringContext += ": "; \
+        if (StringContext.size()) \
+        {   StringContext += ": "; \
         } \
         throw bvmt::error(StringContext + E.Message, E.At + "\n    " AT); \
     } \
@@ -83,6 +83,7 @@ public:
 #define ASSERT_THIS(X, y) ((void)0)
 #define ASSERT_PROBABLY(x) ((void)0)
 #define ASSERT_WORD_ALIGNED(X) ((void)0)
+#define EXPECT_THROW(doStuff, ExpectedError) ((void)0)
 #define TEST(Context, x) ((void)0)
 #define TEST_2_TYPES(Context, x, y, actualTest) ((void)0)
 #define TEST_2_VALUES(Context, X, Y, actualTest) ((void)0)
@@ -121,7 +122,7 @@ static bool TestOnly = False;
 }
 #define TEST_TYPE(Context, x, actualTest) \
 {   using testType = x; \
-    TEST_WITH_CONTEXT(#Context " with " #x " testType", actualTest); \
+    TEST(Context " with " #x " testType", actualTest); \
 }
 #define TEST_2_TYPES(Context, x, y, actualTest) \
 {   TEST_TYPE(Context, x, actualTest); \
@@ -137,7 +138,7 @@ static bool TestOnly = False;
 }
 #define TEST_VALUE(Context, X, actualTest) \
 {   auto TestValue = X; \
-    TEST(#Context " with TestValue=" #X, actualTest); \
+    TEST(Context " with TestValue=" #X, actualTest); \
 } 
 #define TEST_2_VALUES(Context, X, Y, actualTest) \
 {   TEST_VALUE(Context, X, actualTest); \
