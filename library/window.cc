@@ -6,40 +6,12 @@
 
 #include "raylib.h"
 
-#include <algorithm> // std::fill
-
 BVMT
-
-WRAPPER(windowTexture, RenderTexture2D)
-
-windowTexture::windowTexture()
-{   std::fill(std::begin(Data), std::end(Data), 0);
-}
-
-windowTexture::windowTexture(windowResolution Resolution)
-{   unwrap(This) = LoadRenderTexture(Resolution.Width, Resolution.Height);
-}
-
-textureBatcher windowTexture::batch()
-{   return pushPop(This);
-}
-
-void windowTexture::firstPush()
-{   BeginTextureMode(unwrap(This));        
-}
-
-void windowTexture::lastPop()
-{   EndTextureMode();
-}
-
-windowTexture::~windowTexture()
-{   UnloadRenderTexture(unwrap(This)); 
-}
 
 SINGLETON_CC(window,
 {   InitWindow(Resolution.Width, Resolution.Height, "bvmt");
-    TextureL3 = new windowTexture(DefaultResolution);
-    TextureL2 = new windowTexture(DefaultResolution);
+    TextureL3 = new texture(DefaultResolution);
+    TextureL2 = new texture(DefaultResolution);
 })
 
 window::~window()
@@ -48,7 +20,7 @@ window::~window()
     CloseWindow();
 }
 
-bool window::resolution(windowResolution New_Resolution)
+bool window::resolution(size2i New_Resolution)
 {   if (New_Resolution.Width < 64 or New_Resolution.Height < 64)
     {   return False;
     }
@@ -60,7 +32,7 @@ bool window::resolution(windowResolution New_Resolution)
     return True;
 }
 
-windowResolution window::resolution() const
+size2i window::resolution() const
 {   return Resolution;
 }
 

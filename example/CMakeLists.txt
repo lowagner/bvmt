@@ -28,6 +28,7 @@ NEEDED_LIBRARIES
     font
     l2
     push-pop
+    texture
     window
 )
 

@@ -16,4 +16,6 @@ struct size2
     t Height = t();
 };
 
+typedef size2<i32> size2i;
+
 TMVB
