@@ -10,7 +10,7 @@ BVMT
 
 WRAPPER(font, Font)
 
-fontSize font::DefaultSize = fontSize{.Width = 15, .Height = 20};
+size2i font::DefaultSize = size2i{.Width = 15, .Height = 20};
 
 font::font()
 :   font("../shared/resources/sono/Sono-Medium.ttf")
@@ -25,7 +25,7 @@ font::~font()
 {   UnloadFont(unwrap(This));
 }
 
-void font::size(fontSize New_Size)
+void font::size(size2i New_Size)
 {   // We'll figure out Scaling & Spacing for the desired pixel width/height.
     // TODO: Use New_Size.Height as the line height, but
     //      try to add 2/1 pixels to top/bottom if possible.
@@ -43,8 +43,20 @@ void font::size(fontSize New_Size)
     Size = New_Size;
 }
 
-fontSize font::size() const
+size2i font::size() const
 {   return Size;
+}
+
+void font::write(string String, coordinate2i Coordinates) const
+{   Font RaylibFont = unwrap(This);
+    DrawTextEx
+    (   RaylibFont,
+        String.chars(),
+        Vector2{Coordinates.X, Coordinates.Y},
+        Scaling * RaylibFont.baseSize,
+        Spacing,
+        WHITE
+    );
 }
 
 #ifndef NDEBUG

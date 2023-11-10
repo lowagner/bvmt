@@ -17,6 +17,7 @@ struct pushPop
     {   if (--Data->PushCount == 0)
         {   Data->lastPop();
         }
+        Data = Null;
     }
 
 private:

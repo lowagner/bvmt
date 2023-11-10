@@ -2,31 +2,29 @@
 
 #include "dimensions.h"
 
+#include "../core/string.h"
 #include "../core/types.h"
 
 BVMT
 
-typedef size2<i32> fontSize;
-
 struct font
-{   static fontSize DefaultSize;
+{   static size2i DefaultSize;
 
     font();
     font(const char *FontName);
     ~font();
 
-    void size(fontSize New_Size);
-    fontSize size() const;
+    void size(size2i New_Size);
+    size2i size() const;
 
-    // TODO: add a `drawText` method with arbitrary pixel coordinates/offsets.
-    //      inside L2, we'll specify the pixel offsets based on line height,
-    //      but here it can be whatever.
+    // TODO: add FG and BG color argument, possibly in a struct
+    void write(string String, coordinate2i Coordinates) const;
 
     WRAPPER_DATA(48)
 private:
     float Scaling = 1.0;
     float Spacing = 0.0;
-    fontSize Size;
+    size2i Size;
 };
 
 TMVB

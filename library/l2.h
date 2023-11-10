@@ -9,11 +9,9 @@
 
 BVMT
 
-typedef coordinates2<i32> l2Position;
-
 struct l2
 {   const font *Font = Null;
-    l2Position Position;
+    index2i Position;
     // TODO: `rgba Foreground;`
     // TODO: `rgba Background;`
 
@@ -27,7 +25,7 @@ struct l2
     textureBatch batch();
     void writeToRow(const char *Chars);
 private:
-    // TODO: l2Position Min, Max
+    // TODO: index2i Min, Max
     // This is a pointer-pointer because the window can change the texture
     // when changing resolution, and we want to grab the updated version.
     texture **Texture;
