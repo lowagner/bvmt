@@ -4,6 +4,7 @@
 #include "push-pop.h"
 #include "texture.h"
 
+#include "../core/pointer.h"
 #include "../core/types.h"
 
 BVMT
@@ -37,9 +38,9 @@ struct window
 private:
     size2i Resolution = DefaultResolution;
     // The L3 texture is drawn first.
-    texture *TextureL3;
+    pointer<texture> TextureL3;
     // The L2 texture is drawn second, i.e., as a HUD, in case of anything in L3.
-    texture *TextureL2;
+    pointer<texture> TextureL2;
 };
 
 TMVB

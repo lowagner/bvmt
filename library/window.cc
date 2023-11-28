@@ -12,14 +12,12 @@ BVMT
 
 SINGLETON_CC(window,
 {   InitWindow(Resolution.Width, Resolution.Height, "bvmt");
-    TextureL3 = new texture(DefaultResolution);
-    TextureL2 = new texture(DefaultResolution);
+    TextureL3 = pointer<texture>::deleteOnDescope(new texture(DefaultResolution));
+    TextureL2 = pointer<texture>::deleteOnDescope(new texture(DefaultResolution));
 })
 
 window::~window()
-{   DELETE(TextureL2);
-    DELETE(TextureL3);
-    CloseWindow();
+{   CloseWindow();
 }
 
 void window::l2(fn<void(bvmt::l2 *)> L2Modifier_fn)
