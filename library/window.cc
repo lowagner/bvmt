@@ -10,6 +10,8 @@
 
 BVMT
 
+WRAPPER(texture, RenderTexture2D)
+
 SINGLETON_CC(window,
 {   InitWindow(Resolution.Width, Resolution.Height, "bvmt");
     TextureL3 = pointer<texture>::deleteOnDescope(new texture(DefaultResolution));
@@ -20,6 +22,42 @@ window::~window()
 {   CloseWindow();
 }
 
+windowDraw window::draw()
+{   return pushPop(This);
+}
+
+void window::firstPush()
+{   BeginDrawing();
+    // TODO: change to a desired color.
+    ClearBackground(RAYWHITE);
+    draw(*TextureL3); // L3 goes first so it's drawn behind everything
+}
+
+void window::lastPop()
+{   draw(*TextureL2); // L2 goes on top (e.g., for HUD)
+    EndDrawing();
+}
+
+void window::draw(const texture &The_Texture)
+{   RenderTexture2D RaylibTexture = unwrap(The_Texture);
+    const float virtualRatio = (float)Resolution.Width / (float)RaylibTexture.texture.width;
+    DrawTexturePro
+    (   RaylibTexture.texture,
+        // Negate Source rectangle height for OpenGL reasons:
+        Rectangle {0.0f, 0.0f, RaylibTexture.texture.width, -RaylibTexture.texture.height},
+        // Destination:
+        Rectangle
+        {   -virtualRatio,
+            -virtualRatio,
+            GetScreenWidth() + (virtualRatio * 2),
+            GetScreenHeight() + (virtualRatio * 2),
+        },
+        Vector2 {0.0f, 0.0f}, // Origin
+        0.0f,
+        WHITE
+    );
+}
+
 void window::l2(fn<void(bvmt::l2 *)> L2Modifier_fn)
 {   l2Borrowed L2(*TextureL2);
     textureBatch Batch = L2.batch();
@@ -27,7 +65,11 @@ void window::l2(fn<void(bvmt::l2 *)> L2Modifier_fn)
 }
 
 bool window::resolution(size2i New_Resolution)
-{   if (New_Resolution.Width < 64 or New_Resolution.Height < 64)
+{   if (PushCount != 0)
+    {   LOG_ERR("attempted to change window resolution during draw phase");
+        return False;
+    }
+    if (New_Resolution.Width < 64 or New_Resolution.Height < 64)
     {   return False;
     }
     if (New_Resolution.Width > 3840 or New_Resolution.Height > 2160)
