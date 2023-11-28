@@ -20,6 +20,13 @@ template <class t>
 struct size2
 {   t Width = t();
     t Height = t();
+
+    bool operator == (const size2 &Other) const
+    {   return
+                Width == Other.Width
+            &&  Height == Other.Height
+        ;
+    }
 };
 
 typedef coordinate2<i32> coordinate2i;

@@ -75,8 +75,19 @@ bool window::resolution(size2i New_Resolution)
     if (New_Resolution.Width > 3840 or New_Resolution.Height > 2160)
     {   return False;
     }
+    if (New_Resolution == resolution())
+    {   return True;
+    }
+
+    // Resize the textures:
+    auto New_L2 = pointer<texture>::deleteOnDescope(new texture(New_Resolution));
+    // TODO: New_L2->draw(*TextureL2)
+    auto New_L3 = pointer<texture>::deleteOnDescope(new texture(New_Resolution));
+    // TODO: New_L3->draw(*TextureL3)
+    std::swap(New_L2, TextureL2);
+    std::swap(New_L3, TextureL3);
+
     Resolution = New_Resolution;
-    // TODO: resize textures
     return True;
 }
 
