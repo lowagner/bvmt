@@ -19,6 +19,11 @@ struct window
     SINGLETON_H(window)
     ~window();
 
+    // Don't resize this window inside the callback.
+    void l2(fn<void(bvmt::l2 *)> L2Modifier_fn);
+    // TODO: maybe make a pushPop for window that handles drawing.
+    // or at least flags the issue that you can't resize the window while drawing.
+
     // Sets the width and height of the interior drawing region, in pixels.
     // Returns true if successful.
     bool resolution(size2i New_Resolution);
@@ -27,14 +32,14 @@ struct window
 
     // TODO: `void clear(color Color)`
     // TODO: probably need a `void needsRedraw()`
+
+    // TODO: add Font or DefaultFont to window
 private:
     size2i Resolution = DefaultResolution;
     // The L3 texture is drawn first.
     texture *TextureL3;
     // The L2 texture is drawn second, i.e., as a HUD, in case of anything in L3.
     texture *TextureL2;
-
-    friend class l2;
 };
 
 TMVB

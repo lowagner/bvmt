@@ -18,6 +18,8 @@ struct texture
     texture();
     ~texture();
 
+    // TODO: add `i32 width() const` and height methods, via `unwrap(This).texture.width`
+
     UNCOPYABLE_CLASS(texture)
     UNMOVABLE_CLASS(texture) // for pushPop
 

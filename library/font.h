@@ -14,6 +14,9 @@ struct font
     font(const char *FontName);
     ~font();
 
+    UNCOPYABLE_CLASS(font)
+    UNMOVABLE_CLASS(font)
+
     void size(size2i New_Size);
     size2i size() const;
 

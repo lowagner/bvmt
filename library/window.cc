@@ -1,5 +1,7 @@
 #include "window.h"
 
+#include "l2.h"
+
 #ifndef NDEBUG
 #include "../core/error.h"
 #endif
@@ -18,6 +20,12 @@ window::~window()
 {   DELETE(TextureL2);
     DELETE(TextureL3);
     CloseWindow();
+}
+
+void window::l2(fn<void(bvmt::l2 *)> L2Modifier_fn)
+{   l2Borrowed L2(*TextureL2);
+    textureBatch Batch = L2.batch();
+    L2Modifier_fn(&L2);
 }
 
 bool window::resolution(size2i New_Resolution)
